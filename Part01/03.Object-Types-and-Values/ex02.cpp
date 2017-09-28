@@ -1,3 +1,7 @@
+/**
+* Write a program in C++ that converts from miles to kilometers. Your program should
+* have a reasonable prompt for the user to enter a number of miles.
+*/
 #include <iostream>
 
 int main()

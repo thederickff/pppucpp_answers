@@ -1,3 +1,9 @@
+/**
+* Write a program to test an integer value to determinne if it is odd or even.
+* As always, make sure your output is clear and complete. In other words, don't
+* just use yes or no. Your ouput should stand alone, like the value 4 is an even
+* number.
+*/
 #include "../std_lib_facilities.h"
 
 int main()

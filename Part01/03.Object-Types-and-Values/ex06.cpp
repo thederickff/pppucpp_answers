@@ -1,3 +1,9 @@
+/**
+* Write a program that prompts the user to enter three integer values, and then
+* outputs the values in numerical sequence separeted by commas. So, if the user
+* enters the values 10 4 6, the output should be 4, 6, 10. If two values are the
+* same, the should just be ordered together. So the input 4 5 4. sould give 4, 4 5.
+*/
 #include "../std_lib_facilities.h"
 
 int main()
@@ -9,7 +15,7 @@ int main()
   cin >> n3;
   cout << "Okay... I will output in numerical order." << endl;
 
-  if (n1 < n2 && n1 < n3) {
+  if (n1 <= n2 && n1 <= n3) {
     if (n2 < n3)
     {
       cout << n1 << ", " << n2 << ", " << n3 << endl;
@@ -17,7 +23,7 @@ int main()
     {
       cout << n1 << ", " << n3 << ", " << n2 << endl;
     }
-  } else if (n2 < n1 && n2 < n3)
+  } else if (n2 <= n1 && n2 <= n3)
   {
     if (n3 < n1)
     {
@@ -26,7 +32,7 @@ int main()
     {
       cout << n2 << ", " << n1 << ", " << n3 << endl;
     }
-  } else if (n3 < n1 && n3 < n2)
+  } else if (n3 <= n1 && n3 <= n2)
   {
     if (n2 < n1)
     {
