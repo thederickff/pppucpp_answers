@@ -33,12 +33,12 @@
 #include<cstdlib>
 #include<string>
 #include<list>
-#include <forward_list>
+#include<forward_list>
 #include<vector>
 #include<unordered_map>
 #include<algorithm>
-#include <array>
-#include <regex>
+#include<array>
+#include<regex>
 #include<random>
 #include<stdexcept>
 
