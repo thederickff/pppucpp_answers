@@ -10,6 +10,12 @@
  */
 #include "../std_lib_facilities.h"
 
+
+// Start random def
+std::mt19937 rng;
+std::uniform_int_distribution<std::mt19937::result_type> dist9(1, 9); // distribution in range[1, 9]
+// End random def
+
 void separator()
 {
     cout << "------------" << endl;
@@ -17,47 +23,69 @@ void separator()
 
 int main()
 {
-    cout << "Bulls and Cows Game." << endl;
-    cout << "A number with four digits was generated, have a guess." << endl;
-    cout << "One cow means one number is correct, One bull means one" << endl;
-    cout << "number correct and in the right order." << endl;
     vector<int> number(4);
     vector<int> guesses(4);
-    bool running = true;
-    int cows, bulls;
-    // Generate random numbers
-    for (int n : number) {
-        n = randint(10);
-    }
+    int cows, bulls, attempts = 0;
 
-    while (running) {
-        cows = 0;
-        bulls = 0;
-        cout << "1st digit: ";
-        cin >> guesses[0];
-        cout << "2nd digit: ";
-        cin >> guesses[1];
-        cout << "3rd digit: ";
-        cin >> guesses[2];
-        cout << "4th digit: ";
-        cin >> guesses[3];
-        separator();
-        for (int i = 0; i < number.size(); ++i) {
-            cout << guesses[i];
-            if (guesses[i] == number[i]) {
-                bulls++;
-                continue; // steps to the next number rather than checking for cows.
+    do {
+
+        cout << "Bulls and Cows Game." << endl;
+        cout << "A number with four digits was generated, have a guess." << endl;
+        cout << "One cow means one number is correct, One bull means one" << endl;
+        cout << "number correct and in the right order." << endl;
+        bool running = true;
+        rng.seed(std::random_device()());
+        // Generate random numbers    
+        for (unsigned int i = 0; i < number.size(); ++i) {
+            int generated = 0;
+            bool repeated = true;
+
+            while (repeated) {
+                repeated = false;
+                generated = dist9(rng);
+                for (unsigned int j = 0; j < i; ++j) {
+                    if (generated == number[j]) repeated = true;
+                }
             }
-            for (int j = 0; j < guesses.size(); ++j) {
-                if (guesses[j] == number[i]) cows++;
-            }
+
+            number[i] = generated;
         }
-        cout << '\n';
-        cout << "Bulls: " << bulls << endl;
-        cout << "Cows: " << cows << endl;
-        separator();
-        if (bulls == 4) running = false;
-    }
+
+        while (running) {
+            cows = 0;
+            bulls = 0;
+            cout << "1st digit: ";
+            cin >> guesses[0];
+            cout << "2nd digit: ";
+            cin >> guesses[1];
+            cout << "3rd digit: ";
+            cin >> guesses[2];
+            cout << "4th digit: ";
+            cin >> guesses[3];
+            separator();
+            for (unsigned int i = 0; i < number.size(); ++i) {
+                cout << guesses[i];
+                if (guesses[i] == number[i]) {
+                    bulls++;
+                    continue; // steps to the next number rather than checking for cows.
+                }
+                for (unsigned int j = 0; j < guesses.size(); ++j) {
+                    if (guesses[j] == number[i]) cows++;
+                }
+            }
+            cout << '\n';
+            cout << "Bulls: " << bulls << endl;
+            cout << "Cows: " << cows << endl;
+            separator();
+            if (bulls == 4) running = false;
+            ++attempts;
+        }
+        cout << "Attempts: " << attempts << endl;
+        char again;
+        cout << "Do you want to play again? (y/n) ";
+        cin >> again;
+        if (again == 'n') break;
+    } while (true);
 
     return 0;
 }
