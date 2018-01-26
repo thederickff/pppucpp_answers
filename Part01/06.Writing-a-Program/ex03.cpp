@@ -183,7 +183,7 @@ int factorial(int number)
     int sum = 1;
     for (int i = number; i > 0; --i)
         sum *= i;
-    if (sum < 0)
+    if (sum <= 0)
         error("number too large!");
     return sum;
 }
