@@ -59,21 +59,22 @@ double primary(); // deal with numbers and parentheses
 int main()
 {
     try {
-        double val = 0;
         while (cin) {
+            cout << ">"; // print prompt
             Token t = ts.get();
-            if (t.kind == 'q') break; // 'q' for "quit"
-            if (t.kind == ';')        // ';' for "print now"
-                cout << "=" << val << '\n';
-            else
-                ts.putback(t);
-            val = expression();
+            while (t.kind == ';') t=ts.get(); // eat ';'
+            if (t.kind == 'q') {
+                keep_window_open();
+                return 0;
+            }
+            ts.putback(t);
+            cout << "=" << expression() << '\n';
         }
         keep_window_open();
     } 
     catch (exception& e) {
         cerr << e.what() << '\n';
-        keep_window_open();
+        keep_window_open("~~");
         return 1;
     }
 }
