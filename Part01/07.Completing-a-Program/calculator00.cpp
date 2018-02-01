@@ -1,3 +1,49 @@
+/*
+    Simple calculator
+
+    Revision history:
+
+        Revised by Derick Felix December 2017
+        Revised by Derick Felix January 2018
+        Revised by Derick Felix February 2018
+        Originally written by Derick Felix
+            (mail@example.com) Summer 2017
+
+    This program implements a basic expression calculator.
+    Input from cin; output from cout.
+    The grammar for input is:
+
+        Statement:
+            Expression
+            Print
+            Quit
+
+        Print:
+            ;
+
+        Quit
+            q
+
+        Expression:
+            Term
+            Expression + term
+            Expression - term
+        Term:
+            Primary
+            Term * primary
+            Term / primary
+            Term % primary
+        Primary
+            Number
+            ( Expression )
+            + Primary
+            - Primary
+        Number:
+            floating-point-literal
+
+        Input comes from cin through the Token_stream called ts.
+
+*/
 #include "../std_lib_facilities.h"
 
 const char c_number = '8';    // we use '8' to represent a number
@@ -29,19 +75,26 @@ void Token_stream::putback(Token t)
     full = true; // buffer is now full
 }
 
+// read characters from cin and compose a Token
 Token Token_stream::get()
 {
-    if (full) { // do we already have a Token ready?
-        full = false; // remove Token from buffer
+    if (full) { // check if we already have a Token ready
+        full = false;
         return buffer;
     }
     char ch;
     cin >> ch; // note that >> skips whitespace (space, newline, tag, etc.)
+
     switch (ch) {
-        case ';': // for "print"
-        case 'q': // for "quit"
-        case '%': case '/':
-        case '(': case ')': case '+': case '-': case '*':
+        case '%': 
+        case '/':
+        case '(': 
+        case ')': 
+        case '+': 
+        case '-': 
+        case '*':
+        case c_print:
+        case c_quit:
             return Token {ch}; // let each character represent itself
         case '.':
         case '0': case '1': case '2': case '3': case '4':
