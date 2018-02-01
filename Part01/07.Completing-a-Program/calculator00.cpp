@@ -1,5 +1,12 @@
 #include "../std_lib_facilities.h"
 
+const char c_number = '8';    // we use '8' to represent a number
+const char c_quit = 'q';
+const char c_print = ';';
+
+const string prompt = "> ";
+const string result = "= ";
+
 class Token { // a very simple user-defined type
 public:
     char kind;
@@ -33,7 +40,8 @@ Token Token_stream::get()
     switch (ch) {
         case ';': // for "print"
         case 'q': // for "quit"
-        case '(': case ')': case '+': case '-': case '*': case '/':
+        case '%': case '/':
+        case '(': case ')': case '+': case '-': case '*':
             return Token {ch}; // let each character represent itself
         case '.':
         case '0': case '1': case '2': case '3': case '4':
@@ -42,7 +50,7 @@ Token Token_stream::get()
             cin.putback(ch); // put digit back into the input stream
             double val;
             cin >> val;
-            return Token {'8', val}; // let '8' represent "a number"
+            return Token {c_number, val};
         }
         default:
             error("Bad token");
@@ -56,20 +64,23 @@ double expression(); // deal with + and -
 double term(); // deal with *, / and %
 double primary(); // deal with numbers and parentheses
 
+void calculate()
+{
+    while(cin)
+    {
+        cout << prompt; // print prompt
+        Token t = ts.get();
+        while (t.kind == c_print) t=ts.get(); // eat ';'
+        if (t.kind == c_quit) return;
+        ts.putback(t);
+        cout << result << expression() << '\n';
+    }
+}
+
 int main()
 {
     try {
-        while (cin) {
-            cout << ">"; // print prompt
-            Token t = ts.get();
-            while (t.kind == ';') t=ts.get(); // eat ';'
-            if (t.kind == 'q') {
-                keep_window_open();
-                return 0;
-            }
-            ts.putback(t);
-            cout << "=" << expression() << '\n';
-        }
+        calculate();
         keep_window_open();
     } 
     catch (exception& e) {
@@ -119,6 +130,14 @@ double term()
                 t = ts.get();
                 break;
             }
+            case '%':
+            {
+                int v1 = narrow_cast<int>(left);
+                int v2 = narrow_cast<int>(primary());
+                if (v2 == 0) error("divide by zero");
+                left = v1 % v2;
+                t = ts.get();
+            }
             default: 
                 ts.putback(t); // put t back into the token stream
                 return left;
@@ -137,8 +156,12 @@ double primary()
             if (t.kind != ')') error("')' expected");
             return d;
         }
-        case '8': // we use '8' to represent a number
+        case c_number:
             return t.value; // return the number's value
+        case '+':
+            return +primary();
+        case '-':
+            return -primary();
         default:
             error("primary expected");
     }
