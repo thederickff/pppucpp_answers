@@ -61,11 +61,12 @@ public:
 
 class Token_stream {
 public:
-    Token get(); // get a Token
-    void putback(Token t); // put a Token back
+    Token get();            // get a Token
+    void putback(Token t);  // put a Token back
+    void ignore(char c);    // discard characters up to and including a c
 private:
-    bool full {false}; // is there a Token in the buffer?
-    Token buffer; // here is where we keep a Token put back using putback()
+    bool full {false};  // is there a Token in the buffer?
+    Token buffer;       // here is where we keep a Token put back using putback()
 };
 
 void Token_stream::putback(Token t)
@@ -110,6 +111,20 @@ Token Token_stream::get()
     }
 }
 
+/* @c represents the kind of token */
+void Token_stream::ignore(char c) 
+{
+    if (full && c == buffer.kind) {
+        full = false;
+        return;
+    }
+    full = false;
+
+    char ch = 0;
+    while (cin >> ch)
+        if (ch == c) return;
+}
+
 //vector<Token> tok; // we'll put the tokens here
 Token_stream ts; // provides get() and putback()
 // functions to match the grammar rules:
@@ -117,30 +132,36 @@ double expression(); // deal with + and -
 double term(); // deal with *, / and %
 double primary(); // deal with numbers and parentheses
 
+
+void clean_up_mess()
+{
+    ts.ignore(c_print);
+}
+
 void calculate()
 {
     while(cin)
     {
-        cout << prompt; // print prompt
-        Token t = ts.get();
-        while (t.kind == c_print) t=ts.get(); // eat ';'
-        if (t.kind == c_quit) return;
-        ts.putback(t);
-        cout << result << expression() << '\n';
+        try {
+            cout << prompt; // print prompt
+            Token t = ts.get();
+            while (t.kind == c_print) t=ts.get(); // eat ';'
+            if (t.kind == c_quit) return;
+            ts.putback(t);
+            cout << result << expression() << '\n';
+        } catch (exception& e) {
+            cerr << e.what() << '\n';
+            clean_up_mess();
+        }
     }
 }
 
 int main()
 {
-    try {
-        calculate();
-        keep_window_open();
-    } 
-    catch (exception& e) {
-        cerr << e.what() << '\n';
-        keep_window_open("~~");
-        return 1;
-    }
+    calculate();
+    keep_window_open();
+
+    return 0;
 }
 
 double expression()
