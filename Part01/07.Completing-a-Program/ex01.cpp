@@ -1,9 +1,56 @@
 /*
-	calculator08buggy.cpp
+    Simple calculator
 
-	Helpful comments removed.
+    Revision history:
 
-	We have inserted 3 bugs that the compiler will catch and 3 that it won't.
+        Revised by Derick Felix December 2017
+        Revised by Derick Felix January 2018
+        Revised by Derick Felix February 2018
+        Originally written by Derick Felix
+            (mail@example.com) Summer 2017
+
+    This program implements a basic expression calculator.
+    Input from cin; output from cout.
+    The grammar for input is:
+
+        Calculation:
+            Statement
+            Print
+            Quit
+            Calculation Statement
+
+        Statement:
+            Declaration
+            Expression
+
+        Declaration
+            "let" Name "=" Expression
+
+        Print:
+            ;
+
+        Quit
+            q
+
+        Expression:
+            Term
+            Expression + term
+            Expression - term
+        Term:
+            Primary
+            Term * primary
+            Term / primary
+            Term % primary
+        Primary
+            Number
+            ( Expression )
+            + Primary
+            - Primary
+        Number:
+            floating-point-literal
+
+        Input comes from cin through the Token_stream called ts.
+
 */
 #include "../std_lib_facilities.h"
 
