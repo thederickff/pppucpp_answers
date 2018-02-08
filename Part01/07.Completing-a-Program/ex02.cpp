@@ -14,23 +14,28 @@
     The grammar for input is:
 
         Calculation:
-            Statement
             Print
             Quit
+            Statement
             Calculation Statement
-
-        Statement:
-            Declaration
-            Expression
-
-        Declaration
-            "let" Name "=" Expression
 
         Print:
             ;
 
         Quit
             q
+
+
+        Statement:
+            Declaration
+            Assignment
+            Expression
+
+        Declaration
+            "let" Name "=" Expression
+
+        Assignment:
+            Name "=" Expression
 
         Expression:
             Term
@@ -165,6 +170,17 @@ void set_value(string s, double d)
 	names.push_back(Variable(s, d));
 }
 
+double update_value(string s, double d)
+{
+    for (Variable& v : names) {
+        if (v.name == s) {
+            v.value = d;
+            return v.value;
+        }
+    }
+    error("set: undefined name ", s);
+}
+
 bool is_declared(string s)
 {
 	for (int i = 0; i<names.size(); ++i)
@@ -184,13 +200,23 @@ double primary()
 	{	double d = expression();
 		t = ts.get();
 		if (t.kind != ')') error("'(' expected");
+        return d;
 	}
 	case '-':
 		return - primary();
+    case '+':
+        return + primary();
 	case number:
 		return t.value;
 	case name:
+    {
+        Token t2 = ts.get();
+        if (t2.kind == '=') {
+            return update_value(t.name, expression());
+        } 
+        ts.unget(t2);
 		return get_value(t.name);
+    }
 	default:
 		error("primary expected");
 	}
