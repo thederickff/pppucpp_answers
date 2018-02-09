@@ -33,6 +33,7 @@
 
         Declaration
             "let" Name "=" Expression
+            "Const" Name "=" Expression
 
         Assignment:
             Name "=" Expression
@@ -82,6 +83,7 @@ public:
 };
 
 const char let = 'L';
+const char c_const = 'C';
 const char quit = 'Q';
 const char print = ';';
 const char number = '8';
@@ -128,6 +130,7 @@ Token Token_stream::get()
 			cin.unget();
 			if (s == "let") return Token(let);	
 			if (s == "quit") return Token(name);
+            if (s == "const") return Token(c_const);
 			return Token(name,s);
 		}
 		error("Bad token");
@@ -150,10 +153,13 @@ void Token_stream::ignore(char c)
 struct Variable {
 	string name;
 	double value;
+    bool isconst;
 	Variable(string n, double v) :name(n), value(v) { }
+    Variable(string n, double v, bool ic) : name(n), value(v), isconst(ic) { }
 };
 
 vector<Variable> names;	
+bool is_declared(string s);
 
 double get_value(string s)
 {
@@ -162,19 +168,26 @@ double get_value(string s)
 	error("get: undefined name ",s);
 }
 
+void set_value(string s, double d, bool ic)
+{
+	if (is_declared(s))
+		error(s, " declared twice");
+	names.push_back(Variable(s, d, ic));
+}
+
 void set_value(string s, double d)
 {
-	for (int i = 0; i< names.size(); ++i)
-		if (names[i].name == s)
-			error(s, " declared twice");
-	names.push_back(Variable(s, d));
+    set_value(s, d, false);
 }
 
 double update_value(string s, double d)
 {
     for (Variable& v : names) {
         if (v.name == s) {
-            v.value = d;
+            if (v.isconst)
+                error("Cannot change const variable named ", v.name);
+            else
+                v.value = d;
             return v.value;
         }
     }
@@ -274,13 +287,15 @@ double expression()
 double declaration()
 {
 	Token t = ts.get();
+    bool isconst = false;   
+    if (t.kind == c_const) isconst = true;
+    t = ts.get();
 	if (t.kind != 'a') error ("name expected in declaration");
 	string name = t.name;
-	if (is_declared(name)) error(name, " declared twice");
 	Token t2 = ts.get();
 	if (t2.kind != '=') error("= missing in declaration of " ,name);
 	double d = expression();
-	names.push_back(Variable(name,d));
+    set_value(name, d, isconst);
 	return d;
 }
 
@@ -289,7 +304,9 @@ double statement()
 	Token t = ts.get();
 	switch(t.kind) {
 	case let:
-		return declaration();
+    case c_const:
+        ts.unget(t);
+        return declaration();
 	default:
 		ts.unget(t);
 		return expression();
@@ -323,8 +340,8 @@ void calculate()
 int main()
 
 	try {
-        set_value("pi", 3.1415926535);
-        set_value("e", 2.7182818284);
+        set_value("pi", 3.1415926535, true);
+        set_value("e", 2.7182818284, true);
 		calculate();
 		return 0;
 	}
