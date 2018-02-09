@@ -82,6 +82,25 @@ public:
 	void ignore(char);
 };
 
+struct Variable {
+	string name;
+	double value;
+    bool isconst;
+	Variable(string n, double v) :name(n), value(v) { }
+    Variable(string n, double v, bool ic) : name(n), value(v), isconst(ic) { }
+};
+
+class Symbol_table {
+public:
+    double get(string s);
+    double set(string s, double d);
+    bool is_declared(string s);
+    void declare(string s, double v, bool ic);
+    void declare(string s, double v);
+private:
+    vector<Variable> m_var_table;
+};
+
 const char let = 'L';
 const char c_const = 'C';
 const char quit = 'Q';
@@ -150,39 +169,28 @@ void Token_stream::ignore(char c)
 		if (ch==c) return;
 }
 
-struct Variable {
-	string name;
-	double value;
-    bool isconst;
-	Variable(string n, double v) :name(n), value(v) { }
-    Variable(string n, double v, bool ic) : name(n), value(v), isconst(ic) { }
-};
-
-vector<Variable> names;	
-bool is_declared(string s);
-
-double get_value(string s)
+double Symbol_table::get(string s)
 {
-	for (int i = 0; i<names.size(); ++i)
-		if (names[i].name == s) return names[i].value;
+	for (int i = 0; i<m_var_table.size(); ++i)
+		if (m_var_table[i].name == s) return m_var_table[i].value;
 	error("get: undefined name ",s);
 }
 
-void set_value(string s, double d, bool ic)
+void Symbol_table::declare(string s, double d, bool ic)
 {
 	if (is_declared(s))
 		error(s, " declared twice");
-	names.push_back(Variable(s, d, ic));
+	m_var_table.push_back(Variable(s, d, ic));
 }
 
-void set_value(string s, double d)
+void Symbol_table::declare(string s, double d)
 {
-    set_value(s, d, false);
+    declare(s, d, false);
 }
 
-double update_value(string s, double d)
+double Symbol_table::set(string s, double d)
 {
-    for (Variable& v : names) {
+    for (Variable& v : m_var_table) {
         if (v.name == s) {
             if (v.isconst)
                 error("Cannot change const variable named ", v.name);
@@ -194,14 +202,15 @@ double update_value(string s, double d)
     error("set: undefined name ", s);
 }
 
-bool is_declared(string s)
+bool Symbol_table::is_declared(string s)
 {
-	for (int i = 0; i<names.size(); ++i)
-		if (names[i].name == s) return true;
+	for (int i = 0; i<m_var_table.size(); ++i)
+		if (m_var_table[i].name == s) return true;
 	return false;
 }
 
 Token_stream ts;
+Symbol_table st;
 
 double expression();
 
@@ -225,10 +234,10 @@ double primary()
     {
         Token t2 = ts.get();
         if (t2.kind == '=') {
-            return update_value(t.name, expression());
+            return st.set(t.name, expression());
         } 
         ts.unget(t2);
-		return get_value(t.name);
+		return st.get(t.name);
     }
 	default:
 		error("primary expected");
@@ -295,7 +304,7 @@ double declaration()
 	Token t2 = ts.get();
 	if (t2.kind != '=') error("= missing in declaration of " ,name);
 	double d = expression();
-    set_value(name, d, isconst);
+    st.declare(name, d, isconst);
 	return d;
 }
 
@@ -340,8 +349,8 @@ void calculate()
 int main()
 
 	try {
-        set_value("pi", 3.1415926535, true);
-        set_value("e", 2.7182818284, true);
+        st.declare("pi", 3.1415926535, true);
+        st.declare("e", 2.7182818284, true);
 		calculate();
 		return 0;
 	}
