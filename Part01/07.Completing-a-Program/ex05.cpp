@@ -113,6 +113,7 @@ Token Token_stream::get()
 	if (full) { full=false; return buffer; }
 	char ch;
 	cin >> ch;
+
 	switch (ch) {
 	case '(':
 	case ')':
@@ -141,7 +142,15 @@ Token Token_stream::get()
 		cin >> val;
 		return Token(number,val);
 	}
+	case '\\':
+	{
+		char n;
+		cin >> n;
+		if (n != 'n') error("n expected");
+		return Token(print);
+	}
 	default:
+		if (isspace(ch)) return Token(print);
 		if (isalpha(ch)) {
 			string s;
 			s += ch;
