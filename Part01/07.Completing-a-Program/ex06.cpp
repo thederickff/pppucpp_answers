@@ -160,7 +160,7 @@ Token Token_stream::get()
       if (s == "h" || s == "H") return Token(help);
 			if (s == "let") return Token(let);
 			if (s == "quit") return Token(name);
-            if (s == "const") return Token(c_const);
+      if (s == "const") return Token(c_const);
 			return Token(name,s);
 		}
 		error("Bad token");
