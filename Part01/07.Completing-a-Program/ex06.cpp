@@ -107,6 +107,7 @@ const char quit = 'Q';
 const char print = ';';
 const char number = '8';
 const char name = 'a';
+const char help = 'H';
 
 Token Token_stream::get()
 {
@@ -156,6 +157,7 @@ Token Token_stream::get()
 			s += ch;
 			while(cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s+=ch;
 			cin.unget();
+      if (s == "h" || s == "H") return Token(help);
 			if (s == "let") return Token(let);
 			if (s == "quit") return Token(name);
             if (s == "const") return Token(c_const);
@@ -339,12 +341,27 @@ void clean_up_mess()
 const string prompt = "> ";
 const string result = "= ";
 
+void showUsage()
+{
+  cout << "//////////////////////////////////////////////////\n";
+  cout << "Usage: <number> 'operator' <number>';'\n";
+  cout << "Operators: + - / * and mod (percentage symbol)\n";
+  cout << "e.g: 2 * (54 - 23) / 2; 2.3 * 3.2 * (200 - 180);\n";
+  cout << "output:\n= 31\n= 147.2\n";
+  cout << "PPPUCPP Calculator (c) 2018\n";
+  cout << "Press Q to quit.\n\n";
+}
+
 void calculate()
 {
 	while(true) try {
 		cout << prompt;
 		Token t = ts.get();
 		while (t.kind == print) t=ts.get();
+    if (t.kind == help) {
+      showUsage();
+      continue;
+    }
 		if (t.kind == quit) return;
 		ts.unget(t);
 		cout << result << statement() << endl;
