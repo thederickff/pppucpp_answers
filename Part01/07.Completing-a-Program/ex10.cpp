@@ -66,10 +66,10 @@
 class Token {
 public:
 	char kind;
-	double value;
+	int value;
 	string name;
 	Token(char ch) : kind(ch), value(0) { }
-	Token(char ch, double val) : kind(ch), value(val) { }
+	Token(char ch, int val) : kind(ch), value(val) { }
     Token(char ch, string n) : kind(ch), name(n) { }
 };
 
@@ -87,19 +87,19 @@ public:
 
 struct Variable {
 	string name;
-	double value;
-    bool isconst;
-	Variable(string n, double v) :name(n), value(v) { }
-    Variable(string n, double v, bool ic) : name(n), value(v), isconst(ic) { }
+	int value;
+  bool isconst;
+	Variable(string n, int v) :name(n), value(v) { }
+    Variable(string n, int v, bool ic) : name(n), value(v), isconst(ic) { }
 };
 
 class Symbol_table {
 public:
-    double get(string s);
-    double set(string s, double d);
+    int get(string s);
+    int set(string s, int d);
     bool is_declared(string s);
-    void declare(string s, double v, bool ic);
-    void declare(string s, double v);
+    void declare(string s, int v, bool ic);
+    void declare(string s, int v);
 private:
     vector<Variable> m_var_table;
 };
@@ -141,7 +141,7 @@ Token Token_stream::get()
 	case '8':
 	case '9':
 	{	cin.unget();
-		double val;
+		int val;
 		cin >> val;
 		return Token(number,val);
 	}
@@ -182,26 +182,26 @@ void Token_stream::ignore(char c)
 		if (ch==c) return;
 }
 
-double Symbol_table::get(string s)
+int Symbol_table::get(string s)
 {
 	for (int i = 0; i<m_var_table.size(); ++i)
 		if (m_var_table[i].name == s) return m_var_table[i].value;
 	error("get: undefined name ",s);
 }
 
-void Symbol_table::declare(string s, double d, bool ic)
+void Symbol_table::declare(string s, int d, bool ic)
 {
 	if (is_declared(s))
 		error(s, " declared twice");
-	m_var_table.push_back(Variable(s, d, ic));
+  m_var_table.push_back(Variable(s, d, ic));
 }
 
-void Symbol_table::declare(string s, double d)
+void Symbol_table::declare(string s, int d)
 {
     declare(s, d, false);
 }
 
-double Symbol_table::set(string s, double d)
+int Symbol_table::set(string s, int d)
 {
     for (Variable& v : m_var_table) {
         if (v.name == s) {
@@ -225,14 +225,14 @@ bool Symbol_table::is_declared(string s)
 Token_stream ts;
 Symbol_table st;
 
-double expression();
+int expression();
 
-double primary()
+int primary()
 {
 	Token t = ts.get();
 	switch (t.kind) {
 	case '(':
-	{	double d = expression();
+	{	int d = expression();
 		t = ts.get();
 		if (t.kind != ')') error("'(' expected");
         return d;
@@ -257,9 +257,9 @@ double primary()
 	}
 }
 
-double term()
+int term()
 {
-	double left = primary();
+	int left = primary();
 	while(true) {
 		Token t = ts.get();
 		switch(t.kind) {
@@ -274,8 +274,8 @@ double term()
 		}
         case '%':
         {
-            int l1 = narrow_cast<int>(left);
-            int l2 = narrow_cast<int>(primary());
+            int l1 = left;
+            int l2 = primary();
             if (l2 == 0) error("divide by zero");
             left = l1 % l2;
             t = ts.get();
@@ -287,9 +287,9 @@ double term()
 	}
 }
 
-double expression()
+int expression()
 {
-	double left = term();
+	int left = term();
 	while(true) {
 		Token t = ts.get();
 		switch(t.kind) {
@@ -306,22 +306,22 @@ double expression()
 	}
 }
 
-double declaration()
+int declaration()
 {
 	Token t = ts.get();
-    bool isconst = false;
-    if (t.kind == c_const) isconst = true;
-    t = ts.get();
+  bool isconst = false;
+  if (t.kind == c_const) isconst = true;
+  t = ts.get();
 	if (t.kind != 'a') error ("name expected in declaration");
 	string name = t.name;
 	Token t2 = ts.get();
 	if (t2.kind != '=') error("= missing in declaration of " ,name);
-	double d = expression();
-    st.declare(name, d, isconst);
+	int d = expression();
+  st.declare(name, d, isconst);
 	return d;
 }
 
-double statement()
+int statement()
 {
 	Token t = ts.get();
 	switch(t.kind) {
@@ -340,16 +340,16 @@ void clean_up_mess()
 	ts.ignore(print);
 }
 
-const string prompt = "> ";
-const string result = "= ";
+const string prompt = ">>> ";
+const string result = "";
 
 void showUsage()
 {
   cout << "//////////////////////////////////////////////////\n";
   cout << "Usage: <number> 'operator' <number>';'\n";
   cout << "Operators: + - / * and mod (percentage symbol)\n";
-  cout << "e.g: 2 * (54 - 23) / 2; 2.3 * 3.2 * (200 - 180);\n";
-  cout << "output:\n= 31\n= 147.2\n";
+  cout << "e.g: 2 * (54 - 23) / 2; 2 * 3 * (200 - 180);\n";
+  cout << "output:\n= 31\n= 120\n";
   cout << "PPPUCPP Calculator (c) 2018\n";
   cout << "Type 'quit' to quit.\n\n";
 }
@@ -377,8 +377,8 @@ void calculate()
 int main()
 
 	try {
-    st.declare("pi", 3.1415926535, true);
-    st.declare("e", 2.7182818284, true);
+    st.declare("pi", 3, true);
+    st.declare("e", 2, true);
 		calculate();
 		return 0;
 	}
