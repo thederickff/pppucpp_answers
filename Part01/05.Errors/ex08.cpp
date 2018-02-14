@@ -11,12 +11,11 @@
  */
 #include "../std_lib_facilities.h"
 
-int main()
+int n, sum = 0;
+vector<int> numbers;
+
+void getInput()
 {
-
-    int n, sum = 0;
-    vector<int> numbers;
-
     cout << "Please enter the numbers of values you want to sum: " << endl;
     cin >> n;
     cout << "Please enter some integers (press '|' to stop): " << endl;
@@ -25,10 +24,13 @@ int main()
     }
 
     if (numbers.size() < n) error("Sum of more numbers than there are in the vector.");
+}
 
+int main()
+{
     cout << "The sum of the first " << n << " numbers ( ";
     for (int i = 0; i < numbers.size(); ++i) {
-        if (i < n) 
+        if (i < n)
         {
             cout << numbers[i] << " ";
             sum += numbers[i];
