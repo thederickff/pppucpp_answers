@@ -13,10 +13,9 @@
     Input from cin; output from cout.
     The grammar for input is:
 
-        Calculation
+        Calculation:
             Print
             Quit
-						Help
             Statement
             Calculation Statement
 
@@ -24,10 +23,8 @@
             ;
 
         Quit
-            "quit"
+            q
 
-				help
-					"help"
 
         Statement:
             Declaration
@@ -128,6 +125,7 @@ Token Token_stream::get()
 	case '%':
 	case '=':
 	case print:
+  case quit:
 		return Token(ch);
 	case '.':
 	case '0':
@@ -159,9 +157,9 @@ Token Token_stream::get()
 			s += ch;
 			while(cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s+=ch;
 			cin.unget();
-      if (s == "help") return Token(help);
+      if (s == "h" || s == "H") return Token(help);
 			if (s == "let") return Token(let);
-			if (s == "quit") return Token(Quit);
+			if (s == "quit") return Token(name);
       if (s == "const") return Token(c_const);
 			return Token(name,s);
 		}

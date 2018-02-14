@@ -16,6 +16,7 @@
         Calculation:
             Print
             Quit
+						Help
             Statement
             Calculation Statement
 
@@ -23,7 +24,9 @@
             ;
 
         Quit
-            q
+            "quit"
+				Help
+						"help"
 
 
         Statement:
@@ -125,7 +128,6 @@ Token Token_stream::get()
 	case '%':
 	case '=':
 	case print:
-    case quit:
 		return Token(ch);
 	case '.':
 	case '0':
@@ -157,9 +159,9 @@ Token Token_stream::get()
 			s += ch;
 			while(cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s+=ch;
 			cin.unget();
-      if (s == "h" || s == "H") return Token(help);
+      if (s == "help") return Token(help);
 			if (s == "let") return Token(let);
-			if (s == "quit") return Token(name);
+			if (s == "quit") return Token(quit);
       if (s == "const") return Token(c_const);
 			return Token(name,s);
 		}
@@ -349,7 +351,7 @@ void showUsage()
   cout << "e.g: 2 * (54 - 23) / 2; 2.3 * 3.2 * (200 - 180);\n";
   cout << "output:\n= 31\n= 147.2\n";
   cout << "PPPUCPP Calculator (c) 2018\n";
-  cout << "Press Q to quit.\n\n";
+  cout << "Type 'quit' to quit.\n\n";
 }
 
 void calculate()
