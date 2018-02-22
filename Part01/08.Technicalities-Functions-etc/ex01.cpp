@@ -1,65 +1,9 @@
 /*
-    Simple calculator
-
-    Revision history:
-
-        Revised by Derick Felix December 2017
-        Revised by Derick Felix January 2018
-        Revised by Derick Felix February 2018
-        Originally written by Derick Felix
-            (mail@example.com) Summer 2017
-
-    This program implements a basic expression calculator.
-    Input from cin; output from cout.
-    The grammar for input is:
-
-        Calculation:
-            Print
-            Quit
-						Help
-            Statement
-            Calculation Statement
-
-        Print:
-            ;
-
-        Quit
-            "quit"
-				Help
-						"help"
-
-
-        Statement:
-            Declaration
-            Assignment
-            Expression
-
-        Declaration
-            "let" Name "=" Expression
-            "Const" Name "=" Expression
-
-        Assignment:
-            Name "=" Expression
-
-        Expression:
-            Term
-            Expression + term
-            Expression - term
-        Term:
-            Primary
-            Term * primary
-            Term / primary
-            Term % primary
-        Primary
-            Number
-            ( Expression )
-            + Primary
-            - Primary
-        Number:
-            floating-point-literal
-
-        Input comes from cin through the Token_stream called ts.
-
+  Modify the calculator program from Chapter 7 to make the input stream an
+  explicit parameter (as shown in §8.5.8), rather than simply using cin. Also
+  give the Token_stream constructor (§7.8.2) an istream& parameter so that when
+  we figure out how to make our own istreams (e.g., attached to files), we can
+  use the calculator for those. Hint: Don't try to copy an istream.
 */
 #include "../std_lib_facilities.h"
 
@@ -70,19 +14,22 @@ public:
 	string name;
 	Token(char ch) : kind(ch), value(0) { }
 	Token(char ch, int val) : kind(ch), value(val) { }
-    Token(char ch, string n) : kind(ch), name(n) { }
+  Token(char ch, string n) : kind(ch), name(n) { }
 };
 
 class Token_stream {
-	bool full;
-	Token buffer;
 public:
-	Token_stream() : full(0), buffer(0) { }
+	Token_stream() : full(0), buffer(0), is(nullptr) {}
+  Token_stream(istream& i) : full(0), buffer(0), is(&i) {}
 
 	Token get();
 	void unget(Token t) { buffer=t; full=true; }
 
 	void ignore(char);
+private:
+  bool full;
+  Token buffer;
+  istream* is;
 };
 
 struct Variable {
@@ -222,32 +169,31 @@ bool Symbol_table::is_declared(string s)
 	return false;
 }
 
-Token_stream ts;
 Symbol_table st;
 
-int expression();
+int expression(Token_stream& ts);
 
-int primary()
+int primary(Token_stream& ts)
 {
 	Token t = ts.get();
 	switch (t.kind) {
 	case '(':
-	{	int d = expression();
+	{	int d = expression(ts);
 		t = ts.get();
 		if (t.kind != ')') error("'(' expected");
         return d;
 	}
 	case '-':
-		return - primary();
+		return - primary(ts);
     case '+':
-        return + primary();
+        return + primary(ts);
 	case number:
 		return t.value;
 	case name:
     {
         Token t2 = ts.get();
         if (t2.kind == '=') {
-            return st.set(t.name, expression());
+            return st.set(t.name, expression(ts));
         }
         ts.unget(t2);
 		return st.get(t.name);
@@ -257,17 +203,17 @@ int primary()
 	}
 }
 
-int term()
+int term(Token_stream& ts)
 {
-	int left = primary();
+	int left = primary(ts);
 	while(true) {
 		Token t = ts.get();
 		switch(t.kind) {
 		case '*':
-			left *= primary();
+			left *= primary(ts);
 			break;
 		case '/':
-		{	double d = primary();
+		{	double d = primary(ts);
 			if (d == 0) error("divide by zero");
 			left /= d;
 			break;
@@ -275,7 +221,7 @@ int term()
         case '%':
         {
             int l1 = left;
-            int l2 = primary();
+            int l2 = primary(ts);
             if (l2 == 0) error("divide by zero");
             left = l1 % l2;
             t = ts.get();
@@ -287,17 +233,17 @@ int term()
 	}
 }
 
-int expression()
+int expression(Token_stream& ts)
 {
-	int left = term();
+	int left = term(ts);
 	while(true) {
 		Token t = ts.get();
 		switch(t.kind) {
 		case '+':
-			left += term();
+			left += term(ts);
 			break;
 		case '-':
-			left -= term();
+			left -= term(ts);
 			break;
 		default:
 			ts.unget(t);
@@ -306,7 +252,7 @@ int expression()
 	}
 }
 
-int declaration()
+int declaration(Token_stream& ts)
 {
 	Token t = ts.get();
   bool isconst = false;
@@ -316,26 +262,26 @@ int declaration()
 	string name = t.name;
 	Token t2 = ts.get();
 	if (t2.kind != '=') error("= missing in declaration of " ,name);
-	int d = expression();
+	int d = expression(ts);
   st.declare(name, d, isconst);
 	return d;
 }
 
-int statement()
+int statement(Token_stream& ts)
 {
 	Token t = ts.get();
 	switch(t.kind) {
 	case let:
     case c_const:
         ts.unget(t);
-        return declaration();
+        return declaration(ts);
 	default:
 		ts.unget(t);
-		return expression();
+		return expression(ts);
 	}
 }
 
-void clean_up_mess()
+void clean_up_mess(Token_stream& ts)
 {
 	ts.ignore(print);
 }
@@ -354,7 +300,7 @@ void showUsage()
   cout << "Type 'quit' to quit.\n\n";
 }
 
-void calculate()
+void calculate(Token_stream& ts)
 {
 	while(true) try {
 		cout << prompt;
@@ -366,20 +312,21 @@ void calculate()
     }
 		if (t.kind == quit) return;
 		ts.unget(t);
-		cout << result << statement() << endl;
+		cout << result << statement(ts) << endl;
 	}
 	catch(runtime_error& e) {
 		cerr << e.what() << endl;
-		clean_up_mess();
+		clean_up_mess(ts);
 	}
 }
 
 int main()
 
 	try {
+    Token_stream ts;
     st.declare("pi", 3, true);
     st.declare("e", 2, true);
-		calculate();
+		calculate(ts);
 		return 0;
 	}
 	catch (exception& e) {
