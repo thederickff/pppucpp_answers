@@ -3,9 +3,9 @@
 */
 #include "../std_lib_facilities.h"
 
-void printVector(const vector<int>&, const string&);
+void printVector(const vector<string>&, const string&);
 
-void reverse1(vector<int> array)
+void reverse1(vector<string> array)
 {
   for (int i = 0; i < array.size(); ++i) {
     if (array[i] == array[array.size()-1-i]) {
@@ -16,7 +16,7 @@ void reverse1(vector<int> array)
   }
   printVector(array, string("reverse 1"));
 }
-void reverse2(vector<int>& array)
+void reverse2(vector<string>& array)
 {
   for (int i = 0; i < array.size(); ++i) {
     if (array[i] == array[array.size()-1-i]) {
@@ -28,21 +28,21 @@ void reverse2(vector<int>& array)
   printVector(array, string("reverse 2"));
 }
 
-void printVector(const vector<int>& array, const string& label)
+void printVector(const vector<string>& array, const string& label)
 {
   cout << "---- Print " << label << " vector ----\n";
-  for (const int &v : array) {
+  for (const string &v : array) {
     cout << v << " ";
   }
   cout << '\n';
 }
 int main()
 {
-  vector<int> array{1, 3, 5, 7, 9};
-  printVector(array, string("original"));
+  vector<string> array{"a", "b", "c", "d", "e"};
+  printVector(array, string("original #1"));
   reverse1(array);
-  printVector(array, string("original"));
+  printVector(array, string("original #2"));
   reverse2(array);
-  printVector(array, string("original"));
+  printVector(array, string("original #3"));
   return 0;
 }
