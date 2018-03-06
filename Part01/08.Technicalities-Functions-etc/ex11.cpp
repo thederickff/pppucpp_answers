@@ -13,6 +13,16 @@ void print_until_s(const vector<string>& v, const string& quit)
   }
 }
 
+void print_until_ss(const vector<string>& v, const string& quit)
+{
+  int occurence = 0;
+  for (string s : v) {
+    if (s == quit) occurence++;
+    if (occurence > 1) return;
+    cout << s << '\n';
+  }
+}
+
 int main()
 {
   vector<string> array = {"a", "b", "c", "d", "e", "f", "g", "h"};
