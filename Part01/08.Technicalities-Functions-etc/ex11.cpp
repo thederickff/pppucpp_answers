@@ -25,9 +25,11 @@ void print_until_ss(const vector<string>& v, const string& quit)
 
 int main()
 {
-  vector<string> array = {"a", "b", "c", "d", "e", "f", "g", "h"};
-
-  print_until_s(array, "g");
+  vector<string> array = {"a", "b", "c", "b", "d", "e", "f", "g", "h", "a"};
+  cout << "print_until_s()\n";
+  print_until_s(array, "b");
+  cout << "print_until_ss()\n";
+  print_until_ss(array, "b");
 
   return 0;
 }
