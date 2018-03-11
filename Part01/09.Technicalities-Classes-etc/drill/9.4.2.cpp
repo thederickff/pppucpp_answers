@@ -5,9 +5,11 @@ struct Date {
   int m;  // month in year
   int d;  // day of month
 
+  class Invalid {};
+
   Date(int yy, int mm, int dd) : y(yy), m(mm), d(dd)
   {
-        if(!is_valid()) cout << '(' << yy << ',' << mm << ',' << dd<< "): Invalid!\n";
+        if(!is_valid()) throw Invalid();
   }
   void add_day(int n) { d += n; }
 
@@ -27,16 +29,21 @@ ostream& operator<<(ostream& os, const Date& date)
 
 int main()
 {
-  Date today {1978, 6, 25};
-  Date tomorrow {today};
-  tomorrow.add_day(2);
-  Date invalid {2004, 13, -5};
+  try {
+    Date today {1978, 6, 25};
+    Date tomorrow {today};
+    tomorrow.add_day(2);
+    Date invalid {2004, 13, -5};
 
-  cout << today << '\n';
-  cout << tomorrow << '\n';
-  cout << invalid << '\n';
-  invalid.add_day(1);
-  cout << invalid << '\n';
-
+    cout << today << '\n';
+    cout << tomorrow << '\n';
+    cout << invalid << '\n';
+    invalid.add_day(1);
+    cout << invalid << '\n';
+  } catch (Date::Invalid& e) {
+    cerr << "Invalid date.\n";
+  } catch (...) {
+    cerr << "Unknown error." << '\n';
+  }
   return 0;
 }
