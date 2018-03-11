@@ -7,9 +7,10 @@ enum class Month
 class Date
 {
 public:
+  class Invalid {};
   Date(int yy, Month mm, int dd) : y(yy), m(mm), d(dd)
   {
-    if (!is_valid()) cout << '(' << yy << ',' << int(mm) << ',' << dd << "): Invalid Date!\n";
+    if (!is_valid()) throw Invalid();
   }
 
   void add_day(int n) { d += n; }
@@ -39,17 +40,20 @@ ostream& operator<<(ostream& os, Date& date)
 
 int main()
 {
-  Date today {1978, Month::jun, 25};
-  Date tomorrow {today};
-  tomorrow.add_day(2);
-  Date invalid {2004, Month(13), -5};
+  try {
+    Date today {1978, Month::jun, 25};
+    Date tomorrow {today};
+    tomorrow.add_day(2);
+    cout << today << '\n';
+    cout << tomorrow << '\n';
+    Date invalid {2004, Month(13), -5};
+    cout << invalid << '\n';
+    invalid.add_day(1);
+    cout << invalid << '\n';
 
-  cout << today << '\n';
-  cout << tomorrow << '\n';
-  cout << invalid << '\n';
-  invalid.add_day(1);
-  cout << invalid << '\n';
-
+  } catch (Date::Invalid& e) {
+    cerr << "Invalid Date!\n";
+  }
 
   return 0;
 }
