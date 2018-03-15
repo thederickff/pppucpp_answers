@@ -9,8 +9,11 @@ class Name_pairs
 public:
   void read_names();
   void read_ages();
-  void print();
   void sortArrays();
+  vector<string> getName() const { return name; }
+  vector<double> getAge() const { return age; }
+  bool operator==(const Name_pairs& other);
+  bool operator!=(const Name_pairs& other);
 private:
   vector<string> name;
   vector<double> age;
@@ -39,14 +42,6 @@ void Name_pairs::read_ages()
   }
 }
 
-void Name_pairs::print()
-{
-  cout << "\n##################\n";
-  for (int i = 0; i < name.size(); ++i) {
-    cout << name[i] << " has " << age[i] << " years old.\n";
-  }
-}
-
 void Name_pairs::sortArrays()
 {
   cout << "\nSorting Name_pairs...\n";
@@ -62,14 +57,50 @@ void Name_pairs::sortArrays()
   }
 }
 
+bool Name_pairs::operator==(const Name_pairs& other)
+{
+  if (name.size() != other.getName().size()) return false;
+  int matches = 0;
+  for (int i = 0; i < name.size(); ++i) {
+    if (name[i] == other.getName()[i]) matches++;
+  }
+  if (matches != name.size()) return false;
+
+  return true;
+}
+
+bool Name_pairs::operator!=(const Name_pairs& other)
+{
+  return !(*this == other);
+}
+
+ostream& operator<<(ostream& os, Name_pairs& np)
+{
+  os << "\n#######################\n";
+  for (int i = 0; i < np.getName().size(); ++i) {
+    os << np.getName()[i] << " has " << np.getAge()[i] << " years old.\n";
+  }
+  return os;
+}
+
 int main()
 {
   Name_pairs name_pairs;
-
   name_pairs.read_names();
   name_pairs.read_ages();
-  name_pairs.print();
+  cout << name_pairs;
   name_pairs.sortArrays();
-  name_pairs.print();
+  cout << name_pairs;
+
+  Name_pairs name_pairs2;
+  name_pairs2.read_names();
+  name_pairs2.read_ages();
+  name_pairs2.sortArrays();
+
+  if (name_pairs == name_pairs2) {
+    cout << "It is equal!\n";
+  } else {
+    cout << "It is not equal!\n";
+  }
   return 0;
 }
