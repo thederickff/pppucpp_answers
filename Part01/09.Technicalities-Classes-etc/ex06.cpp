@@ -79,17 +79,22 @@ bool operator!=(const Book& book, const Book& other)
   return !(book == other);
 }
 
+ostream& operator<<(ostream& os, const Book& book)
+{
+  os << "--------------------------------\n";
+  os << "Book's ISBN: " << book.getISBN() << '\n';
+  os << "Book's title: " << book.getTitle() << '\n';
+  os << "Book's year: " << book.getDate().year() << '\n';
+  return os;
+}
+
 int main()
 {
   try {
     Book book;
-    cout << "Book's ISBN: " << book.getISBN() << '\n';
-    cout << "Book's title: " << book.getTitle() << '\n';
-    cout << "Book's year: " << book.getDate().year() << '\n';
+    cout << book;
     Book book2("0-0-0-a", "any title", "other author", Chrono::Date(2016, Chrono::Month::feb, 16), true);
-    cout << "Book2's ISBN: " << book2.getISBN() << '\n';
-    cout << "Book2's title: " << book2.getTitle() << '\n';
-    cout << "Book2's year: " << book2.getDate().year() << '\n';
+    cout << book2;
 
     if (book == book2) cout << "They are the same book!\n";
     else cout << "They are not the same book!\n";
