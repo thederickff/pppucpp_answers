@@ -8,6 +8,31 @@
 #include "../std_lib_facilities.h"
 #include "Chrono.h"
 
+class Patron
+{
+public:
+  Patron()
+    : m_Name("Unknown User"), m_CardNumber("000000"), m_Fee(0) { }
+
+  Patron(string name, string cardNumber, double fee)
+    : m_Name(name), m_CardNumber(cardNumber), m_Fee(fee) { }
+
+  string getName() const { return m_Name; }
+  string getCardNumber() const { return m_CardNumber; }
+  double getFee() const { return m_Fee; }
+
+  void setFee(double fee) { m_Fee = fee; }
+private:
+  string m_Name;
+  string m_CardNumber;
+  double m_Fee;
+};
+
+bool owes_a_fee(const Patron& patron)
+{
+  return patron.getFee() > 0;
+}
+
 enum class Genre
 {
   fiction, nonfiction, periodical, biography, children
@@ -103,6 +128,11 @@ ostream& operator<<(ostream& os, const Book& book)
 int main()
 {
   try {
+    Patron patron {"Any Name", "385927", 2.23213};
+
+    cout << "Does " << patron.getName() << " owes a fee?\n";
+    if (owes_a_fee(patron)) cout << "Yeah, he does: $"  << patron.getFee() << '\n';
+    else cout << "No, he doesn't\n";
     Book book;
     Book book2 {"2-3-2-b", "The Mist", "Stephen King", Chrono::Date(2007, Chrono::Month::oct, 2), true, Genre::fiction};
     cout << book;
