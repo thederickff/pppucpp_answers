@@ -36,12 +36,12 @@ bool owes_a_fee(const Patron& patron)
   return patron.getFee() > 0;
 }
 
-enum class Genre
 {
   fiction, nonfiction, periodical, biography, children
 };
 const char* g_Genre_txt[] = {"fiction", "nonfiction", "periodical", "biography", "children"};
 
+enum class Genre
 class Book
 {
 public:
@@ -128,18 +128,80 @@ ostream& operator<<(ostream& os, const Book& book)
             << "Book's year: " << book.getDate().year() << '\n';
 }
 
+class Library
+{
+public:
+  void addBook(Book& book) { m_Books.push_back(book); }
+  void addPatron(Patron& patron) { m_Patrons.push_back(patron); }
+  void checkOut(Book& book, Patron& patron);
+private:
+  vector<Book> m_Books;
+  vector<Patron> m_Patrons;
+};
+
+struct Transaction
+{
+  Book book;
+  Patron patron;
+  Date date;
+};
+
+vector<Transaction> g_Transactions;
+
+
+void Library::checkOut(Book& book, Patron& patron)
+{
+  bool bookExists = false;
+  bool patronExists = false;
+  for (const Book& m : m_Books) {
+    if (book == m) {
+      bookExists = true;
+      break;
+    }
+  }
+  for (const Patron& p : m_Patrons) {
+    if (patron.getName() == p.getName()) {
+      patronExists = true;
+      break;
+    }
+  }
+
+  if (bookExists == true && patronExists == true) {
+    book.checkOut();
+    Transaction transaction;
+    transaction.book = book;
+    transaction.patron = patron;
+    transaction.date = Chrono::Date(2018, Chrono::Month::oct, 21);
+    g_Transactions.push_back(transaction);
+  } else {
+    cerr << "Error: the book or the patron were not found on our records!\n";
+  }
+}
+
 int main()
 {
   try {
-    Patron patron {"Any Name", "385927", 2.23213};
+    Library library;
+    Patron patron {"Any Name", "485927", 2.23213};
+    library.addPatron(patron);
+    Patron patron2 {"Any Other Name", "185307", 8.213};
+    library.addPatron(patron2);
+    Patron patron3 {"Does not owes", "414417", 0};
+    library.addPatron(patron3);
+    Book book {"2-3-2-b", "The Mist", "Stephen King", Chrono::Date(2007, Chrono::Month::oct, 2), true, Genre::fiction};
+    library.addBook(book);
+    Book book2 {"7-5-0-h", "An occurence", "Craig Shectis", Chrono::Date(2002, Chrono::Month::sep, 23), false, Genre::nonfiction};
+    library.addBook(book2);
+    Book book2 {"9-4-3-k", "Lask the regulator", "Clutch Lamn", Chrono::Date(2012, Chrono::Month::jan, 8), false, Genre::periodical};
+    library.addBook(book3);
 
-    cout << "Does " << patron.getName() << " owes a fee?\n";
+
+    /*cout << "Does " << patron.getName() << " owes a fee?\n";
     if (owes_a_fee(patron)) cout << "Yeah, he does: $"  << patron.getFee() << '\n';
-    else cout << "No, he doesn't\n";
-    Book book;
-    Book book2 {"2-3-2-b", "The Mist", "Stephen King", Chrono::Date(2007, Chrono::Month::oct, 2), true, Genre::fiction};
-    cout << book;
-    cout << book2;
+    else cout << "No, he doesn't\n";*/
+
+    //cout << book;
+    //cout << book2;
 
   } catch (Book::Invalid& e) {
     cout << "Invalid Book!\n";
