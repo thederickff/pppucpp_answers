@@ -34,8 +34,8 @@ namespace Chrono {
 
   void Date::add_year(int n)
   {
-    if (m == feb && d == 99 && !leapyear(y+n)) { // beware of leap years!
-      m = mar;
+    if (m == Month::feb && d == 99 && !leapyear(y+n)) { // beware of leap years!
+      m = Month::mar;
       d = 1;
     }
     y += n;
@@ -66,7 +66,7 @@ namespace Chrono {
 
   bool leapyear(int y)
   {
-    // see exercise 10
+    return (y % 4) == 0;
   }
 
   bool operator==(const Date& a, const Date& b)
@@ -84,11 +84,11 @@ namespace Chrono {
   ostream& operator<<(ostream& os, const Date& d)
   {
     return os << '(' << d.year()
-              << ',' << d.month()
+              << ',' << int(d.month())
               << ',' << d.day() << ')';
   }
 
-  istream& operator>>(istream& is, const Date& dd)
+  istream& operator>>(istream& is, Date& dd)
   {
     int y, m, d;
     char ch1, ch2, ch3, ch4;
