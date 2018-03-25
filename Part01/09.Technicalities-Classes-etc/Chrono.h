@@ -28,6 +28,7 @@ namespace Chrono {
     int d;
   };
 
+  int days_in_month(int y, Month m);
   bool is_date(int y, Month m, int d);  // true for valid date
   bool leapyear(int y);   // true if y is a leap year
 
@@ -37,5 +38,13 @@ namespace Chrono {
   ostream& operator<<(ostream& os, const Date& d);
 
   istream& operator>>(istream& is, Date& dd);
+
+  enum class Day {
+    sunday, monday, tuesday, wednesday, thursday, friday, saturday
+  };
+
+  void next_day(Day& day);
+  Day day_of_week_on_date(const Date& d);
+  void next_workday(Date& d);
 
 }                     // Chrono

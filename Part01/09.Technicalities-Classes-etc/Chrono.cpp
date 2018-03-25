@@ -24,7 +24,12 @@ namespace Chrono {
 
   void Date::add_day(int n)
   {
+    int dim = days_in_month(y, m);
 
+    d += n;
+    if (d > dim) {
+      d -= dim;
+    }
   }
 
   void Date::add_month(int n)
@@ -34,7 +39,7 @@ namespace Chrono {
 
   void Date::add_year(int n)
   {
-    if (m == Month::feb && d == 99 && !leapyear(y+n)) { // beware of leap years!
+    if (m == Month::feb && d == 29 && !leapyear(y+n)) { // beware of leap years!
       m = Month::mar;
       d = 1;
     }
@@ -42,13 +47,8 @@ namespace Chrono {
   }
   // Helper functions:
 
-  bool is_date(int y, Month m, int d)
+  int days_in_month(int y, Month m)
   {
-    // assume that y is valid
-
-    if (d <= 0) return false;   // d must be positive
-    if (m < Month::jan || Month::dec < m) return false;
-
     int days_in_month = 31;     // most months have 31 days;
 
     switch (m) {
@@ -59,8 +59,17 @@ namespace Chrono {
       days_in_month = 30;       // the rest have 30 days
       break;
     }
+    return days_in_month;
+  }
 
-    if (days_in_month < d) return false;
+  bool is_date(int y, Month m, int d)
+  {
+    // assume that y is valid
+
+    if (d <= 0) return false;   // d must be positive
+    if (m < Month::jan || Month::dec < m) return false;
+
+    if (days_in_month(y, m) < d) return false;
     return true;
   }
 
@@ -84,8 +93,8 @@ namespace Chrono {
   ostream& operator<<(ostream& os, const Date& d)
   {
     return os << '(' << d.year()
-              << ',' << int(d.month())
-              << ',' << d.day() << ')';
+              << ", " << int(d.month())
+              << ", " << d.day() << ')';
   }
 
   istream& operator>>(istream& is, Date& dd)
@@ -104,10 +113,6 @@ namespace Chrono {
     return is;
   }
 
-  enum class Day {
-    sunday, monday, tuesday, wednesday, thursday, friday, saturday
-  };
-
   Day day_of_week(const Date& d)
   {
     // ...
@@ -121,5 +126,56 @@ namespace Chrono {
   Date next_weekday(const Date& d)
   {
     // ...
+  }
+
+  void next_day(Day& day) {
+    if (day == Day::saturday) {
+      day = Day::sunday;
+    } else {
+      day = Day(int(day) + 1);
+    }
+  }
+
+  Day day_of_week_on_date(const Date& d)
+  {
+    Day day = Day::thursday; // 1st, January of 1970 is a thursday
+    int days = 0;
+    for (int i = 1970; i <= d.year(); i++) {
+      int max_month = 12;
+      if (i == d.year()) {
+        max_month = int(d.month());
+      }
+      for (int m = 1; m <= max_month; m++) {
+        int daysInMonth = days_in_month(i, Month(m));
+
+        if (i == d.year() && m == max_month) {
+          daysInMonth = d.day()-1;
+        }
+
+        for (int j = 1; j <= daysInMonth; j++) {
+          next_day(day);
+        }
+
+        days += daysInMonth;
+      }
+    }
+
+    return day;
+  }
+
+  void next_workday(Date& d)
+  {
+    Day day_of_week = day_of_week_on_date(d);
+    switch (day_of_week) {
+      case Day::friday:
+        d.add_day(3);
+        break;
+      case Day::saturday:
+        d.add_day(2);
+        break;
+      default:
+        d.add_day(1);
+        break;
+    }
   }
 } // Chrono
