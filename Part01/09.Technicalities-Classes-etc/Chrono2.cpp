@@ -1,51 +1,76 @@
 // Chrono.cpp
-#include "Chrono.h"
+#include "Chrono2.h"
 
 namespace Chrono {
 // Member function definitions
 
-  Date::Date(int yy, Month mm, int dd)
-       : y(yy), m(mm), d(dd)
+  Date::Date(long int days) : m_Days(days), m_Year(1970),
+      m_Day(1), m_Month(Month::jan)
   {
-    if (!is_date(yy, mm, dd)) throw Invalid();
+    if (days < 0) throw Invalid();
+
+    for (int i = 0; i < days; ++i)
+    {
+      add_day(1);
+    }
   }
 
-  const Date& default_date()
-  {
-    static Date dd {2001, Month::jan, 1}; // start of 21st century
-    return dd;
-  }
-  Date::Date()
-       : y(default_date().year()),
-       m(default_date().month()),
-       d(default_date().day())
-  {
-  }
+  Date::Date() : m_Days(0), m_Year(1970),
+        m_Month(Month::jan), m_Day(1) { } // 1st, January 1970
 
   void Date::add_day(int n)
   {
-    int dim = days_in_month(y, m);
-
-    d += n;
-    if (d > dim) {
-      d -= dim;
+    int dim = days_in_month(m_Year, m_Month);
+    m_Day += n;
+    if (m_Day > dim) {
+      m_Day -= dim;
+      add_month(1);
     }
   }
 
   void Date::add_month(int n)
   {
-
+    if (m_Month == Month::dec) {
+      m_Month = Month::jan;
+      add_year(1);
+    } else {
+      m_Month = Month(int(m_Month) + 1);
+    }
   }
 
   void Date::add_year(int n)
   {
-    if (m == Month::feb && d == 29 && !leapyear(y+n)) { // beware of leap years!
-      m = Month::mar;
-      d = 1;
+    m_Year += n;
+    if (m_Month == Month::feb && m_Day == 29 && !leapyear(m_Year + n))
+    {
+      m_Month == Month::mar;
+      m_Day = 1;
     }
-    y += n;
   }
+
   // Helper functions:
+
+  int days_since(int year, Month m, int d)
+  {
+    int days = 0;
+    for (int i = 1970; i <= year; i++) {
+      int max_month = 12;
+      if (i == year) {
+        max_month = int(m);
+      }
+      for (int mm = 1; mm <= max_month; mm++) {
+        int dim = days_in_month(i, Month(mm));
+
+        if (i == year && mm == max_month) {
+          dim = d;
+        }
+
+        days += dim;
+      }
+    }
+
+    return days-1;
+  }
 
   int days_in_month(int y, Month m)
   {
@@ -60,17 +85,6 @@ namespace Chrono {
       break;
     }
     return days_in_month;
-  }
-
-  bool is_date(int y, Month m, int d)
-  {
-    // assume that y is valid
-
-    if (d <= 0) return false;   // d must be positive
-    if (m < Month::jan || Month::dec < m) return false;
-
-    if (days_in_month(y, m) < d) return false;
-    return true;
   }
 
   bool leapyear(int y)
@@ -94,7 +108,8 @@ namespace Chrono {
   {
     return os << '(' << d.year()
               << ", " << int(d.month())
-              << ", " << d.day() << ')';
+              << ", " << d.day() << ')'
+              << " Total days since 1st, January 1970: " << d.days();
   }
 
   istream& operator>>(istream& is, Date& dd)
@@ -108,7 +123,7 @@ namespace Chrono {
       return is;
     }
 
-    dd = Date(y, Month(m), d);                                // update dd
+    dd = Date(days_since(y, Month(m), d));                   // update dd
 
     return is;
   }

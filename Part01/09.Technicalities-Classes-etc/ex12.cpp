@@ -5,9 +5,19 @@
   that way (feel free to reject days before day 0, i.e., no negative days).
 */
 #include "../std_lib_facilities.h"
+#include "Chrono2.h"
 
 int main()
 {
+  int days = Chrono::days_since(2001, Chrono::Month::feb, 28);
+  cout << "Days: " << days << '\n';
+  Chrono::Date date(days);
+  cout << date << '\n';
+  Chrono::Date provided;
+  cout << "Type a date by yourself in this format include the parenthensis: (yy, mm, dd)\n";
+  cin >> provided;
+
+  cout << "> " << provided << '\n';
 
   return 0;
 }
