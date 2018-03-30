@@ -8,6 +8,15 @@
 */
 #include "../std_lib_facilities.h"
 
+enum class Currency
+{
+  AUD, BRL, CAD, DKK, EUR, GBP, USD
+};
+
+string currency_text[] = {
+  "AUD", "BRL", "CAD", "DKK", "EUR", "GBP", "USD"
+};
+
 class Money
 {
 public:
@@ -19,16 +28,17 @@ public:
     private:
       double m_Value;
   };
-  Money() : m_Cents(0) { }
-  Money(double value);
+  Money() : m_Currency(Currency::USD), m_Cents(0) { }
+  Money(Currency currency, double value);
   long int getCents() const { return m_Cents; }
 private:
+  Currency m_Currency;
   long int m_Cents;
 };
 ostream& operator<<(ostream& stream, const Money& money);
 istream& operator>>(istream& stream, Money& money);
 
-Money::Money(double value)
+Money::Money(Currency currency, double value) : m_Currency(currency)
 {
   if (value < 0) {
     throw InvalidMoney(value);
@@ -39,18 +49,18 @@ Money::Money(double value)
 
 ostream& operator<<(ostream& stream, const Money& money)
 {
-  double currency = double(money.getCents()) / 100;
-  int dollars = int(currency);
+  double value = double(money.getCents()) / 100;
+  int dollars = int(value);
 
   stream << '$' << dollars << '.';
-  double cents = (currency - dollars) * 100;
+  double cents = (value - dollars) * 100;
   stream << (cents < 10 ? "0" : "") << cents;
   return stream;
 }
 
 istream& operator>>(istream& stream, Money& money)
 {
-  char ch1;
+  /*char ch1;
   double value;
   stream >> ch1 >> value;
   if (!stream) return stream;
@@ -60,6 +70,7 @@ istream& operator>>(istream& stream, Money& money)
   }
 
   money = value;
+  */
 
   return stream;
 }
@@ -67,13 +78,13 @@ istream& operator>>(istream& stream, Money& money)
 int main()
 {
   try {
-    Money food = 3.11;
+    Money food {Currency::USD, 3.11};
 
     cout << food << '\n';
-    Money input;
-    cout << "Input a money: e.g., $4.23\n";
-    cin >> input;
-    cout << "Output: " << input << '\n';
+    //Money input;
+    //cout << "Input a money: e.g., $4.23\n";
+    //cin >> input;
+    //cout << "Output: " << input << '\n';
 
   } catch (Money::InvalidMoney& e) {
     e.what();
