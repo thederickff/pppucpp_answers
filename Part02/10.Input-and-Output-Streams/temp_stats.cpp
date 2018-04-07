@@ -8,11 +8,12 @@
 struct Reading {
   int hour;
   double temperature;
+  char scale;
 };
 
 ostream& operator<<(ostream& stream, const Reading& reading)
 {
-  stream << '(' << reading.hour << ',' << reading.temperature << ")";
+  stream << '(' << reading.hour << ',' << reading.temperature << " " << reading.scale << ")";
   return stream;
 }
 
@@ -20,18 +21,19 @@ istream& operator>>(istream& stream, Reading& reading)
 {
   int hour;
   double temperature;
-  char ch1, ch2, ch3;
+  char ch1, ch2, ch3, scale;
 
-  stream >> ch1 >> hour >> ch2 >> temperature >> ch3;
+  stream >> ch1 >> hour >> ch2 >> temperature >> scale >> ch3;
 
   if (!stream) return stream;
-  if (ch1 != '(' || ch2 != ',' || ch3 != ')') { //ops: format error
+  if (ch1 != '(' || ch2 != ',' || ch3 != ')' || (scale != 'f' && scale != 'c')) { //ops: format error
     stream.clear(ios_base::failbit);
     return stream;
   }
 
   reading.hour = hour;
   reading.temperature = temperature;
+  reading.scale = scale;
 
   return stream;
 }
@@ -47,6 +49,9 @@ int main()
   while (!ifs.eof()) {
     Reading reading;
     ifs >> reading;
+    if (reading.scale == 'c') {
+      reading.temperature = ((reading.temperature * 9) / 5) + 32;
+    }
     temps.push_back(reading.temperature);
   }
 
@@ -59,7 +64,6 @@ int main()
     for (int j = i+1; j < temps.size(); ++j) {
         if (temps[i] == temps[j]) {
           repeats++;
-          cout << "Repeat of " << temps[i] << '\n';
         }
     }
 

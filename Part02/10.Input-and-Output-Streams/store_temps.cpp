@@ -4,27 +4,28 @@
   "temperature readings". Call this program store_temps.cpp and the file it
   creates raw_temps.txt.
 */
-#include "../std_lib_facilities.h"
+#include "std_lib_facilities.h"
 
 struct Reading {      //a temperature reading
   int hour;           //hour after midnight [0:23]
-  double temperature; //in fahrenheit
+  double temperature;
+  char scale;
 };
 
 int main()
 {
   vector<Reading> temps {
-    { 1,62.3}, { 2,63.0}, { 3, 62.9}, { 4, 63.3},
-    { 5,62.6}, { 6,63.5}, { 7, 64.8}, { 8, 64.7},
-    { 9,64.1}, {10,65.5}, {11, 67.4}, {12, 68.9},
-    {13,67.6}, {14,68.7}, {15, 70.3}, {16, 69.2},
-    {17,65.3}, {18,68.6}, {19, 65.9}, {20, 66.3},
-    {21,65.1}, {22,63.9}, {23, 64.5}, {24, 62.8}
+    { 1,22.3, 'c'}, { 2,63.0, 'f'}, { 3, 22.9, 'c'}, { 4, 23.3, 'c'},
+    { 5,62.6, 'f'}, { 6,13.5, 'c'}, { 7, 14.8, 'c'}, { 8, 64.7, 'f'},
+    { 9,14.1, 'c'}, {10,65.5, 'f'}, {11, 67.4, 'f'}, {12, 18.9, 'c'},
+    {13,22.3, 'c'}, {14,18.7, 'c'}, {15, 20.3, 'c'}, {16, 69.2, 'f'},
+    {17,65.3, 'f'}, {18,18.6, 'c'}, {19, 15.9, 'c'}, {20, 66.3, 'f'},
+    {21,22.3, 'c'}, {22,23.9, 'c'}, {23, 64.5, 'f'}, {24, 12.8, 'c'}
   };
   ofstream ofs {"raw_temps.txt"};
 
   for (int i = 0; i < temps.size(); ++i) {
-    ofs << '(' << temps[i].hour << ',' << temps[i].temperature << ")\n";
+    ofs << '(' << temps[i].hour << ',' << temps[i].temperature << " " << temps[i].scale << ")\n";
   }
 
   return 0;
