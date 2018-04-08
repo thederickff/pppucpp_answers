@@ -39,8 +39,8 @@ int month_to_int(string mm)
 
 string int_to_month(int i)
 {
-    if (i < 0 || i > 11) error("bad month index");
-    return month_print_tbl[i];
+  if (i < 0 || i > 11) error("bad month index");
+  return month_print_tbl[i];
 }
 
 bool is_valid(const Reading& r);
@@ -162,20 +162,20 @@ void end_of_loop(istream& ist, char term, const string& message)
 int main()
 {
   // open input file:
-  cout << "Please enter input file name\n";
-  string iname;
-  cin >> iname;
-  ifstream ifs {iname};
-  if (!ifs) error("can't open input file ", iname);
+  //cout << "Please enter input file name\n";
+  //string iname;
+  //cin >> iname;
+  ifstream ifs {"structured_file.txt"};//{iname};
+  //if (!ifs) error("can't open input file ", iname);
 
   //ifs.exceptions(ifs.exceptions()|ios_base::badbit);  // throw for bad()
 
   // open output file:
-  cout << "Please enter output file name\n";
-  string oname;
-  cin >> oname;
-  ofstream ofs {oname};
-  if (!ofs) error("can't open output file ", oname);
+  //cout << "Please enter output file name\n";
+  //string oname;
+  //cin >> oname;
+  ofstream ofs {"output.txt"};//{oname};
+  //if (!ofs) error("can't open output file ", oname);
 
   // read an arbitrary number of years:
   vector<Year> ys;
@@ -195,5 +195,33 @@ int main()
 
 void print_year(ofstream& ofs, const Year& y)
 {
+  ofs << "{\n\tYear " << y.year << " ";
+  for (const Month& m : y.month) {
+    if (m.month != not_a_month) {
+      ofs << "{\n\t\t";
+      ofs << m;
+      ofs << "\n\t} ";
+    }
+  }
+  ofs << "\n}\n";
+}
 
+ostream& operator<<(ostream& os, const Month& m)
+{
+  os << "Month " << int_to_month(m.month) << "\n\t\t";
+  for (int i = 0; i < m.day.size(); ++i) {
+    for (int y = 0; y < m.day[i].hour.size(); ++y) {
+      if (m.day[i].hour[y] != not_a_reading) {
+        os << "\t";
+        Reading r {i, y, m.day[i].hour[y]};
+        os << r;
+      }
+    }
+  }
+  return os;
+}
+ostream& operator<<(ostream& os, const Reading& r)
+{
+  os << "(Day: " << r.day << ", Hour: " << r.hour << ", Temp: " << r.temperature << "f)";
+  return os;
 }
