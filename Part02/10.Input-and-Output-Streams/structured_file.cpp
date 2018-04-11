@@ -166,16 +166,16 @@ int main()
   //string iname;
   //cin >> iname;
   ifstream ifs {"structured_file.txt"};//{iname};
-  //if (!ifs) error("can't open input file ", iname);
+  if (!ifs) error("can't open input file ", iname);
 
   //ifs.exceptions(ifs.exceptions()|ios_base::badbit);  // throw for bad()
 
   // open output file:
-  //cout << "Please enter output file name\n";
-  //string oname;
-  //cin >> oname;
-  ofstream ofs {"output.txt"};//{oname};
-  //if (!ofs) error("can't open output file ", oname);
+  cout << "Please enter output file name\n";
+  string oname;
+  cin >> oname;
+  ofstream ofs {oname};
+  if (!ofs) error("can't open output file ", oname);
 
   // read an arbitrary number of years:
   vector<Year> ys;
