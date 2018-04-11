@@ -17,6 +17,8 @@
 
 class Roman_int {
 public:
+  Roman_int() {}
+  Roman_int(string roman);
   int as_int();
 
   void add(char ch) { characters.push_back(ch); }
@@ -25,6 +27,7 @@ private:
   vector<char> characters;
   int number;
 };
+string int_to_roman(int number);
 
 int charValue(char roman_char)
 {
@@ -46,6 +49,13 @@ int charValue(char roman_char)
   }
   return -1;
 }
+Roman_int::Roman_int(string roman)
+{
+  characters.reserve(roman.size());
+  for (int i = 0; i < roman.size(); ++i) {
+    characters.push_back(roman[i]);
+  }
+}
 
 int Roman_int::as_int()
 {
@@ -60,6 +70,28 @@ int Roman_int::as_int()
   }
 
   return total;
+}
+
+Roman_int operator+(Roman_int& a, Roman_int& b)
+{
+  int sum = a.as_int() + b.as_int();
+  return Roman_int(int_to_roman(sum));
+}
+
+Roman_int operator-(Roman_int& a, Roman_int& b)
+{
+  int sum = a.as_int() - b.as_int();
+  return Roman_int(int_to_roman(sum));
+}
+Roman_int operator*(Roman_int& a, Roman_int& b)
+{
+  int sum = a.as_int() * b.as_int();
+  return Roman_int(int_to_roman(sum));
+}
+Roman_int operator/(Roman_int& a, Roman_int& b)
+{
+  int sum = a.as_int() / b.as_int();
+  return Roman_int(int_to_roman(sum));
 }
 
 istream& operator>>(istream& is, Roman_int& r)
@@ -84,14 +116,54 @@ ostream& operator<<(ostream& os, const Roman_int& r)
   return os;
 }
 
+
+vector<string> romans_tbl = {
+  "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"
+};
+vector<int> number_tbl { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+
+string int_to_roman(int number)
+{
+  string roman = "";
+  int times = 0;
+  for (int i = romans_tbl.size()-1; i > 0; --i) {
+    times = number / number_tbl[i];
+    number %= number_tbl[i];
+    while (times > 0) {
+      roman += romans_tbl[i];
+      times--;
+    }
+  }
+
+  return roman;
+}
+
 int main()
 {
 
-  while(true) {
-    Roman_int r;
-    cin >> r;
-    cout << "Roman " << r << " equals " << r.as_int() << '\n';
+  Roman_int r, r2, result;
+  char operator_sign;
+  cin >> r;
+  cin >> operator_sign;
+  cin >> r2;
+  switch (operator_sign) {
+    case '+':
+      result = r + r2;
+      break;
+    case '-':
+      result = r - r2;
+      break;
+    case '*':
+      result = r * r2;
+      break;
+    case '/':
+      result = r / r2;
+      break;
+    default:
+      error("Unknown operator sign");
   }
+
+  cout << "= " << result << "\n";
 
   return 0;
 }
