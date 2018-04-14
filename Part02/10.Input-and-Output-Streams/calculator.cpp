@@ -37,6 +37,8 @@
         Declaration
             "let" Name "=" Expression
             "Const" Name "=" Expression
+            "from" filename
+            "to" filename
 
         Assignment:
             Name "=" Expression
@@ -59,9 +61,16 @@
             floating-point-literal
 
         Input comes from cin through the Token_stream called ts.
+        "From" filename declaration can also read a file as input.
+
+        Output goes to cout and may also goes to a file if a "To" filename
+        declaration is defined
 
 */
-#include "../std_lib_facilities.h"
+#include "std_lib_facilities.h"
+
+ofstream ofs;
+ifstream ifs;
 
 class Token {
 public:
@@ -70,7 +79,7 @@ public:
 	string name;
 	Token(char ch) : kind(ch), value(0) { }
 	Token(char ch, int val) : kind(ch), value(val) { }
-    Token(char ch, string n) : kind(ch), name(n) { }
+  Token(char ch, string n) : kind(ch), name(n) { }
 };
 
 class Token_stream {
@@ -90,7 +99,7 @@ struct Variable {
 	int value;
   bool isconst;
 	Variable(string n, int v) :name(n), value(v) { }
-    Variable(string n, int v, bool ic) : name(n), value(v), isconst(ic) { }
+  Variable(string n, int v, bool ic) : name(n), value(v), isconst(ic) { }
 };
 
 class Symbol_table {
@@ -104,8 +113,23 @@ private:
     vector<Variable> m_var_table;
 };
 
+struct Input {
+  bool get(char ch)
+  {
+    if (ifs) return ifs.get(ch);
+    else return cin.get(ch);
+  }
+  void unget()
+  {
+    if (ifs) ifs.unget();
+    else cin.unget();
+  }
+}
+
 const char let = 'L';
 const char c_const = 'C';
+const char from_f = 'F';
+const char to_f = 'T';
 const char quit = 'Q';
 const char print = ';';
 const char number = '8';
@@ -116,7 +140,7 @@ Token Token_stream::get()
 {
 	if (full) { full=false; return buffer; }
 	char ch;
-	cin >> ch;
+	ist >> ch;
 
 	switch (ch) {
 	case '(':
@@ -140,15 +164,15 @@ Token Token_stream::get()
 	case '7':
 	case '8':
 	case '9':
-	{	cin.unget();
+	{	ist.unget();
 		int val;
-		cin >> val;
+		ist >> val;
 		return Token(number,val);
 	}
 	case '\\':
 	{
 		char n;
-		cin >> n;
+		ist >> n;
 		if (n != 'n') error("n expected");
 		return Token(print);
 	}
@@ -157,12 +181,14 @@ Token Token_stream::get()
 		if (isalpha(ch)) {
 			string s;
 			s += ch;
-			while(cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s+=ch;
-			cin.unget();
+			while(ist.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_' || ch == '.')) s+=ch;
+			ist.unget();
       if (s == "help") return Token(help);
 			if (s == "let") return Token(let);
 			if (s == "quit") return Token(quit);
       if (s == "const") return Token(c_const);
+      if (s == "from") return Token(from_f);
+      if (s == "to") return Token(to_f);
 			return Token(name,s);
 		}
 		error("Bad token");
@@ -178,7 +204,7 @@ void Token_stream::ignore(char c)
 	full = false;
 
 	char ch;
-	while (cin>>ch)
+	while (ist>>ch)
 		if (ch==c) return;
 }
 
@@ -326,7 +352,7 @@ int statement()
 	Token t = ts.get();
 	switch(t.kind) {
 	case let:
-    case c_const:
+  case c_const:
         ts.unget(t);
         return declaration();
 	default:
@@ -358,6 +384,13 @@ void calculate()
 {
 	while(true) try {
 		cout << prompt;
+
+    if (ifs) {
+      ist = ifs;
+    } else {
+      ist = cin;
+    }
+
 		Token t = ts.get();
 		while (t.kind == print) t=ts.get();
     if (t.kind == help) {
@@ -365,8 +398,29 @@ void calculate()
       continue;
     }
 		if (t.kind == quit) return;
+
+    if (t.kind == from_f) {
+      if (ifs) ifs.close();
+      Token t2 = ts.get();
+      if (t2.kind != 'a') error("file name expected!");
+      ifs.open(t2.name);
+      continue;
+    }
+
+    if (t.kind == to_f) {
+      if (ofs) ofs.close();
+      Token t2 = ts.get();
+      if (t2.kind != 'a') error("file name expected!");
+      ofs.open(t2.name);
+      continue;
+    }
+
 		ts.unget(t);
-		cout << result << statement() << endl;
+    int stmt = statement();
+		cout << result << stmt << endl;
+    if (ofs) {
+      ofs << result << stmt << endl;
+    }
 	}
 	catch(runtime_error& e) {
 		cerr << e.what() << endl;
@@ -385,12 +439,12 @@ int main()
 	catch (exception& e) {
 		cerr << "exception: " << e.what() << endl;
 		char c;
-		while (cin >>c&& c!=';') ;
+		while (ist >>c&& c!=';') ;
 		return 1;
 	}
 	catch (...) {
 		cerr << "exception\n";
 		char c;
-		while (cin>>c && c!=';');
+		while (ist>>c && c!=';');
 		return 2;
 	}
