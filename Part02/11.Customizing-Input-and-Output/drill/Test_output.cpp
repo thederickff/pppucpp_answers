@@ -8,16 +8,39 @@
   5. Now output your age.
   6. Was there a problem? What happened? Fix your output to decimal.
   7. Go back to 2 and cause your output to show the base for each output.
+  8. Try reading as octal, hexadecimal, etc.:
+       cin >> a >> oct >> b >> hex >> c >> d;
+       cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
+     Run this code with the input:
+       1234 1234 1234 1234
+     Explain the results.
 */
 #include "../std_lib_facilities.h"
 
 int main()
 {
-  int birth_year = 2001;
+  int birth_year = 2001, a, b, c, d;
 
   cout << showbase << "Decimal: " << birth_year << '\t' <<
   hex << "Hexadecimal: " << birth_year << '\t' <<
   oct << "Octal: " << birth_year << '\n';
   cout << "Age: " << dec << (2018 - birth_year) << '\n';
+
+  cin >> a >> oct >> b >> hex >> c >> d;
+  /*
+    Input:
+      1234 1234 1234 1234
+    Ouputs:
+      1234 668 4660 4660
+
+    To output the correct values 1234 the input should be:
+      1234 01234 4d2 4d2
+      
+    668 in decimal is the equivalent to 1234 in octal
+    4660 in decimal is the equilent to 1234 in hexadecimal
+  */
+  cout << a << '\t' << b << '\t' << c << '\t' << d << '\n';
+
+
   return 0;
 }
