@@ -7,6 +7,7 @@
      do it.
   5. Now output your age.
   6. Was there a problem? What happened? Fix your output to decimal.
+  7. Go back to 2 and cause your output to show the base for each output.
 */
 #include "../std_lib_facilities.h"
 
@@ -14,7 +15,7 @@ int main()
 {
   int birth_year = 2001;
 
-  cout << "Decimal: " << birth_year << '\t' <<
+  cout << showbase << "Decimal: " << birth_year << '\t' <<
   hex << "Hexadecimal: " << birth_year << '\t' <<
   oct << "Octal: " << birth_year << '\n';
   cout << "Age: " << dec << (2018 - birth_year) << '\n';
