@@ -6,6 +6,7 @@
   4. Did you line up your output in columns using the tab character? If not,
      do it.
   5. Now output your age.
+  6. Was there a problem? What happened? Fix your output to decimal.
 */
 #include "../std_lib_facilities.h"
 
@@ -16,6 +17,6 @@ int main()
   cout << "Decimal: " << birth_year << '\t' <<
   hex << "Hexadecimal: " << birth_year << '\t' <<
   oct << "Octal: " << birth_year << '\n';
-  cout << "Age: " << (2018 - birth_year) << '\n';
+  cout << "Age: " << dec << (2018 - birth_year) << '\n';
   return 0;
 }
