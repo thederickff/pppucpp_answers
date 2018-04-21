@@ -9,7 +9,32 @@
 
 int main()
 {
-  
+  string filename;
+  cout << "Input a filename: ";
+  cin >> filename;
+
+  ifstream ifs {filename};
+  if (!ifs) error("Could not open file for read: ", filename);
+
+  ofstream ofs {string("output_") + filename};
+  if (!ofs) error("Could not write to output file!");
+
+  while (ifs) {
+    string line;
+    getline(ifs, line);
+
+    for (char& ch : line) {
+      if (ch == '\"' || !ispunct(ch)) {
+        ofs << ch;
+      } else {
+        ofs << ' ';
+      }
+    }
+
+    ofs << '\n';
+  }
+
+  cout << "File written successfully\n";
 
   return 0;
 }
