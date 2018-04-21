@@ -23,10 +23,15 @@ int main()
     getline(ifs, line);
 
     for (char& ch : line) {
-      if (ch == '\"' || !ispunct(ch)) {
+      ch = tolower(ch);
+      if (ch == '\"' || ch == '-' || !ispunct(ch)) {
         ofs << ch;
       } else {
-        ofs << ' ';
+        if (ch == '\'') {
+          ofs << 'o';
+        } else {
+          ofs << ' ';
+        }
       }
     }
 
