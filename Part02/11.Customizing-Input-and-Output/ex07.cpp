@@ -18,25 +18,48 @@ int main()
   ofstream ofs {string("output_") + filename};
   if (!ofs) error("Could not write to output file!");
 
+  ostringstream oss;
+
   while (ifs) {
     string line;
     getline(ifs, line);
 
     for (char& ch : line) {
       ch = tolower(ch);
-      if (ch == '\"' || ch == '-' || !ispunct(ch)) {
-        ofs << ch;
+      if (ch == '\"' || ch == '\'' || !ispunct(ch)) {
+        oss << ch;
       } else {
-        if (ch == '\'') {
-          ofs << 'o';
-        } else {
-          ofs << ' ';
-        }
+        oss << ' ';
       }
     }
 
+    oss << '\n';
+  }
+
+  istringstream iss {oss.str()};
+
+  while (iss) {
+    string line;
+    getline(iss, line);
+
+    istringstream issline {line};
+    for (string word; issline >> word; ) {
+      if (word == "don't") word = "do not";
+      if (word == "can't") word = "cannot";
+      if (word == "wouldn't") word = "woudl not";
+      if (word == "couldn't") word = "could not";
+      if (word == "doesn't") word = "does not";
+      if (word == "weren't") word = "were not";
+      if (word == "wasn't") word = "was not";
+      if (word == "haven't") word = "have not";
+      if (word == "hasn't") word = "has not";
+      if (word == "isn't") word = "is not";
+      if (word == "aren't") word = "are not";
+      ofs << word << " ";
+    }
     ofs << '\n';
   }
+
 
   cout << "File written successfully\n";
 
