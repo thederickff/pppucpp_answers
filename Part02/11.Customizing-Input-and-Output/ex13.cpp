@@ -1,0 +1,14 @@
+/*
+  Reverse the order of words (defined as whitespace-separated strings) in a
+  file. For example, Norwegian Blue parrot becomes parrot Blue Norwegian. You
+  are allowed to assume that all the strings from the file will fit into memory
+  at once.
+*/
+#include "std_lib_facilities.h"
+
+int main()
+{
+  
+
+  return 0;
+}
