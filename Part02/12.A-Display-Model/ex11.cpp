@@ -8,44 +8,117 @@
 #include "Simple_window.h"
 #include "Graph.h"
 
+#include <cmath>
+
+void draw_poly(Simple_window &win, Polygon &poly,
+    const int sides, const int win_width, const int win_height);
+
 int main()
 {
-  Simple_window win(Point{350, 150}, 640, 480, "Exercise #11");
 
-  int ix = win.x_max()/2, iy = win.y_max()/2;
-  Polygon poly3;
-  poly3.add(Point{ix, iy});
-  poly3.add(Point{ix+10, iy});
-  poly3.add(Point{ix+5, iy-10});
+  Point top_left{100, 100};
+  constexpr int win_width = 600;
+  constexpr int win_height = 400;
 
-  Polygon poly4;
-  poly4.add(Point{ix, iy});
-  poly4.add(Point{ix+10, iy});
-  poly4.add(Point{ix+10, iy-10});
-  poly4.add(Point{ix, iy-10});
+  Simple_window win{ top_left, win_width, win_height, "Exercises #11" };
 
-  Polygon poly5;
-  poly5.add(Point{ix, iy});
-  poly5.add(Point{ix+10, iy});
-  poly5.add(Point{ix+10, iy-10});
-  poly5.add(Point{ix+5, iy-20});
-  poly5.add(Point{ix, iy-10});
+  try
+  {
+    Polygon tri;
+    constexpr int tri_sides = 3;
+    draw_poly(win, tri, tri_sides, win_width, win_height);
 
-  Polygon poly6;
-  poly6.add(Point{ix, iy+5});
-  poly6.add(Point{ix+10, iy+5});
-  poly6.add(Point{ix+20, iy-10});
-  poly6.add(Point{ix+10, iy-20});
-  poly6.add(Point{ix, iy-25});
-  poly6.add(Point{ix-10, iy-15});
+    Polygon quadr;
+    constexpr int quadr_sides = 4;
+    draw_poly(win, quadr, quadr_sides, win_width, win_height);
 
-  win.attach(poly3);
-  win.attach(poly4);
-  win.attach(poly5);
-  win.attach(poly6);
+    Polygon penta;
+    constexpr int penta_sides = 5;
+    draw_poly(win, penta, penta_sides, win_width, win_height);
 
-  win.wait_for_button();
+    Polygon hexa;
+    constexpr int hexa_sides = 6;
+    draw_poly(win, hexa, hexa_sides, win_width, win_height);
+
+    Polygon septa;
+    constexpr int septa_sides = 7;
+    draw_poly(win, septa, septa_sides, win_width, win_height);
+
+    Polygon octa;
+    constexpr int octa_sides = 8;
+    draw_poly(win, octa, octa_sides, win_width, win_height);
+
+    Polygon nova;
+    constexpr int nova_sides = 9;
+    draw_poly(win, nova, nova_sides, win_width, win_height);
+
+    Polygon deca;
+    constexpr int deca_sides = 10;
+    draw_poly(win, deca, deca_sides, win_width, win_height);
 
 
+    win.wait_for_button();
+  }
+  catch (const runtime_error &rte)
+  {
+    Text err_msg_start{ Point{ 150, 200 }, "runtime_error: " };
+    Text err_msg{ Point{ 250, 200 }, rte.what() };
+
+    err_msg_start.set_color(Color::black);
+    err_msg.set_color(Color::black);
+
+    win.attach(err_msg_start);
+    win.attach(err_msg);
+
+    win.wait_for_button();
+    return 1;
+  }
+  catch (const exception &e)
+  {
+    Text err_msg_start{ Point{ 150, 200 }, "Execption: " };
+    Text err_msg{ Point{ 250, 200 }, e.what() };
+
+    err_msg_start.set_color(Color::black);
+    err_msg.set_color(Color::black);
+
+    win.attach(err_msg_start);
+    win.attach(err_msg);
+
+    win.wait_for_button();
+    return 2;
+  }
+  catch (...)
+  {
+    Text err_msg_start{ Point{ 150, 200 }, "An unknown execption occurred." };
+
+    err_msg_start.set_color(Color::black);
+
+    win.attach(err_msg_start);
+
+    win.wait_for_button();
+
+    return 3;
+  }
   return 0;
+}
+
+void draw_poly(Simple_window &win, Polygon &poly,
+    const int sides, const int win_width, const int win_height)
+{
+  constexpr double pi = 3.14159265359;
+  constexpr int revolution = 360;
+  constexpr double radius = 150;
+
+  for (int deg = 0; deg < revolution; deg += (revolution / sides))
+  {
+    double rad = deg * pi / 180;
+    Point pt {
+      int(radius * cos(rad - pi / 2)) + (win_width / 2),
+      abs(int(radius * sin(rad - pi / 2)) - (win_height / 2))
+    };
+    poly.add(pt);
+    poly.set_color(Color::black);
+  }
+
+  win.attach(poly);
 }
