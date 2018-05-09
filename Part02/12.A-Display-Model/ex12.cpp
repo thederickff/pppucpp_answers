@@ -26,7 +26,7 @@ int sign(double w)
   return 0;
 }
 
-void draw_superellipse(double a, double b, double m, double n, double sides, Polygon &poly, Simple_window &win);
+void draw_superellipse(double a, double b, double m, double n, double points, Open_polyline &poly, Simple_window &win);
 
 int main()
 {
@@ -40,9 +40,8 @@ int main()
     constexpr double m = 0.5;
     constexpr double n = 0.5;
 
-    Polygon superellipse;
-    int sides = 20;
-    draw_superellipse(a, b, m, n, sides, superellipse, win);
+    Open_polyline superellipse;
+    draw_superellipse(a, b, m, n, 90, superellipse, win);
 
     win.wait_for_button();
   }
@@ -77,7 +76,7 @@ int main()
   return 0;
 }
 
-void draw_superellipse(double a, double b, double m, double n, double sides, Polygon &poly, Simple_window &win)
+void draw_superellipse(double a, double b, double m, double n, double points, Open_polyline &poly, Simple_window &win)
 {
   constexpr double pi = 3.14159265359;
   constexpr int angles = 360;
@@ -86,7 +85,7 @@ void draw_superellipse(double a, double b, double m, double n, double sides, Pol
   int offsetX = win_width / 2;
   int offsetY = -(win_height / 2);
 
-  for (int deg = 0; deg < angles; deg += (angles / sides))
+  for (int deg = 0; deg < angles; deg += (angles / points))
   {
     double rad = deg * pi / 180;
     double x = cos(rad);
