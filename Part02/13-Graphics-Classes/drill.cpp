@@ -4,6 +4,10 @@
      each square is 100 by 100).
   3. Make the eight squares on the diagonal starting from the top left corner
      red (use Rectangle).
+  4. Find a 200-by-200-pixel image (JPEG or GIF) and place three copies of it on
+     the grid (each image covering four squares). If you can't find an image
+     that is exactly 200 by 200, use set_mask() to pick a 200-by-200 section of
+     a larger image. Don't obscure the red squares.
 */
 #include "Simple_window.h"
 #include "Graph.h"
@@ -18,15 +22,22 @@ int main()
   try
   {
     Vector_ref<Rectangle> rects;
+    Vector_ref<Image> imgs;
 
     for (int i = 0; i < 8; ++i) {
       for (int j = 0; j < 8; ++j) {
-        rects.push_back(new Rectangle(Point{i*100, j*100}, 100, 100));
-        int index = rects.size()-1;
         if (i == j) {
+          rects.push_back(new Rectangle(Point{i*100, j*100}, 100, 100));
+          int index = rects.size()-1;
           rects[index].set_fill_color(Color::red);
+          win.attach(rects[index]);
+        } else {
+          imgs.push_back(new Image(Point{i*100, j*100}, "friend.jpg"));
+          int index = imgs.size()-1;
+          imgs[index].set_mask(Point{56, 56}, 200, 200);
+          win.attach(imgs[index]);
         }
-        win.attach(rects[index]);
+
       }
     }
 
