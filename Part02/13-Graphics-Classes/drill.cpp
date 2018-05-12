@@ -2,6 +2,8 @@
   1. Make an 800-by-1000 Simple_window.
   2. Put an 8-by-8 grid on the leftmost 800-by-800 part of the window (so that
      each square is 100 by 100).
+  3. Make the eight squares on the diagonal starting from the top left corner
+     red (use Rectangle).
 */
 #include "Simple_window.h"
 #include "Graph.h"
@@ -20,7 +22,11 @@ int main()
     for (int i = 0; i < 8; ++i) {
       for (int j = 0; j < 8; ++j) {
         rects.push_back(new Rectangle(Point{i*100, j*100}, 100, 100));
-        win.attach(rects[rects.size()-1]);
+        int index = rects.size()-1;
+        if (i == j) {
+          rects[index].set_fill_color(Color::red);
+        }
+        win.attach(rects[index]);
       }
     }
 
