@@ -1,56 +1,7 @@
 /*
   Define a class Arc, which draws a part of an ellipse. Hint: fl_arc().
 */
-#include "Simple_window.h"
-#include "Graph.h"
-
-struct Arc : Shape
-{
-public:
-  Arc(Point p, int ww, int hh, int aa); // center, width, height, angle of arc
-
-  void draw_lines() const;
-
-  Point center() const;
-  Point focus1() const;
-  Point focus2() const;
-
-  void set_major(int ww)
-  {
-    set_point(0, Point{center().x-ww, center().y-h});
-    w = ww;
-  }
-
-  void set_minor(int hh)
-  {
-    set_point(0, Point{center().x-w, center().y-hh});
-    h = hh;
-  }
-
-  int major() const { return w; }
-  int minor() const { return h; }
-private:
-  int w;
-  int h;
-  int a;
-};
-
-Arc::Arc(Point p, int ww, int hh, int aa)
-: w(ww), h(hh), a(aa)
-{
-  add(Point{p.x-w, p.y-h});
-}
-
-Point Arc::center() const
-{
-  return Point{point(0).x+w, point(0).y+h};
-}
-
-void Arc::draw_lines() const
-{
-  if (color().visibility())
-    fl_arc(point(0).x, point(0).y, w, h, 0, a);
-}
+#include "Custom_shapes.h"
 
 int main()
 {
