@@ -4,10 +4,14 @@
 #include "Simple_window.h"
 #include "Graph.h"
 
+constexpr int win_width = 800;
+constexpr int win_height = 600;
+
+////////////////////////////////// Arc /////////////////////////////////////////
 struct Arc : Shape
 {
-public:
-  Arc(Point p, int ww, int hh, int aa); // center, width, height, angle of arc
+  Arc(Point p, int ww, int hh, int eaa); // center, width, height, end ang
+  Arc(Point p, int ww, int hh, int iaa, int eaa); // center, width, height, init ang, end ang
 
   void draw_lines() const;
 
@@ -32,7 +36,19 @@ public:
 private:
   int w;
   int h;
-  int a;
+  int ia;
+  int ea;
+};
+
+////////////////////////////////// Box /////////////////////////////////////////
+struct Box : Shape
+{
+  Box(Point p, int w, int h);
+
+  void draw_lines() const;
+private:
+  int width;
+  int height;
 };
 
 #endif // defined(__Custom__Shapes__)

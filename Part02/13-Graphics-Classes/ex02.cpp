@@ -1,17 +1,20 @@
 /*
-  Define a class Arc, which draws a part of an ellipse. Hint: fl_arc().
+  Draw a box with rounded corners. Define a class Box, consisting, of four lines
+  and four arcs.
 */
 #include "Custom_shapes.h"
 
 int main()
 {
-  Simple_window win(Point{250, 10}, win_width, win_height, "Exercise 01 - Chapter 13: Graphics Classes");
+  Simple_window win(Point{250, 10}, win_width, win_height, "Exercise 02 - Chapter 13: Graphics Classes");
 
   try
   {
-    Arc arc({500, 200}, 250, 150, 180);
+    //Arc arc({500, 200}, 150, 150, 90, 180);
+    Box box({300, 200}, 50, 50);
 
-    win.attach(arc);
+    //win.attach(arc);
+    win.attach(box);
 
     win.wait_for_button();
   }
