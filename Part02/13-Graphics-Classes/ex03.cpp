@@ -9,10 +9,37 @@ int main()
 
   try
   {
-    //Box box({300, 200}, 50, 50);
+    Arrow arrow0(Point{100, 200}, 50, 0);
+    Arrow arrow90(Point{200, 200}, 50, 90);
+    Arrow arrow180(Point{300, 200}, 50, 180);
+    Arrow arrow270(Point{350, 200}, 50, 270);
+    Arrow arrow360(Point{400, 200}, 50, 360);
 
-    //win.attach(arc);
-    win.attach(box);
+    Arrow arrow45(Point{100, 300}, 50, 45);
+    Arrow arrow135(Point{200, 300}, 50, 135);
+    Arrow arrow225(Point{250, 300}, 50, 225);
+    Arrow arrow315(Point{300, 300}, 50, 315);
+
+    Arrow arrow323(Point{100, 400}, 50, 323);
+    Arrow arrow763(Point{200, 400}, 50, 763);
+    Arrow arrow231(Point{300, 400}, 50, 231);
+    Arrow arrow298(Point{400, 400}, 50, 298);
+
+    win.attach(arrow0);
+    win.attach(arrow90);
+    win.attach(arrow180);
+    win.attach(arrow270);
+    win.attach(arrow360);
+
+    win.attach(arrow45);
+    win.attach(arrow135);
+    win.attach(arrow225);
+    win.attach(arrow315);
+
+    win.attach(arrow323);
+    win.attach(arrow763);
+    win.attach(arrow231);
+    win.attach(arrow298);
 
     win.wait_for_button();
   }

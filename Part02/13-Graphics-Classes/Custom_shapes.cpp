@@ -1,5 +1,7 @@
 #include "Custom_shapes.h"
 
+#include <cmath>
+
 ////////////////////////////////// Arc /////////////////////////////////////////
 Arc::Arc(Point p, int ww, int hh, int eaa)
 : w(ww), h(hh), ia(0), ea(eaa)
@@ -54,6 +56,45 @@ void Box::draw_lines() const
     fl_line(c2.x+width, c2.y+height/2, c4.x+width, c4.y+height/2);
     fl_line(c1.x, c1.y+height/2, c3.x, c3.y+height/2);
     fl_line(c3.x+width/2, c3.y+height, c4.x+width/2, c4.y+height);
+
+  }
+}
+
+////////////////////////////////// Arrow ///////////////////////////////////////
+Arrow::Arrow(Point p, int l, int a)
+: length(l), angle(a)
+{
+  add(p);
+}
+
+void Arrow::draw_lines() const
+{
+  if (color().visibility())
+  {
+    Point init {point(0).x, point(0).y};
+
+    Point other {
+      int(length * cos(radian(angle))) + init.x,
+      abs(int(length * sin(radian(angle))) - init.y)
+    };
+    Point arrow {
+      int(10 * cos(radian(angle))) + other.x,
+      abs(int(10 * sin(radian(angle))) - other.y)
+    };
+    Point arrowPlus90 {
+      int(5 * cos(radian(angleAdd(angle, 90)))) + other.x,
+      abs(int(5 * sin(radian(angleAdd(angle, 90)))) - other.y)
+    };
+    Point arrowMinus90 {
+      int(5 * cos(radian(angleSub(angle, 90)))) + other.x,
+      abs(int(5 * sin(radian(angleSub(angle, 90)))) - other.y)
+    };    
+
+    fl_line(init.x, init.y, other.x, other.y);
+    fl_line(other.x, other.y, arrowPlus90.x, arrowPlus90.y);
+    fl_line(other.x, other.y, arrowMinus90.x, arrowMinus90.y);
+    fl_line(arrowPlus90.x, arrowPlus90.y, arrow.x, arrow.y);
+    fl_line(arrowMinus90.x, arrowMinus90.y, arrow.x, arrow.y);
 
   }
 }

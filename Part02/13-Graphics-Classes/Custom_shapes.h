@@ -51,4 +51,34 @@ private:
   int height;
 };
 
+////////////////////////////////// Arrow ///////////////////////////////////////
+constexpr double pi = 3.14159265359;
+
+inline double radian(int angle)
+{
+  return angle * pi / 180;
+}
+
+inline int angleAdd(int a, int b)
+{
+  int angle = a + b;
+  if (angle > 360) angle -= 360;
+  return angle;
+}
+inline int angleSub(int a, int b)
+{
+  int angle = a - b;
+  if (angle < 0) angle += 360;
+  return angle;
+}
+
+struct Arrow : Shape
+{
+  Arrow(Point p1, int l, int a);
+  void draw_lines() const;
+private:
+  int length;
+  int angle;
+};
+
 #endif // defined(__Custom__Shapes__)
