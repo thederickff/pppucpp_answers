@@ -88,7 +88,7 @@ void Arrow::draw_lines() const
     Point arrowMinus90 {
       int(5 * cos(radian(angleSub(angle, 90)))) + other.x,
       abs(int(5 * sin(radian(angleSub(angle, 90)))) - other.y)
-    };    
+    };
 
     fl_line(init.x, init.y, other.x, other.y);
     fl_line(other.x, other.y, arrowPlus90.x, arrowPlus90.y);
@@ -96,5 +96,52 @@ void Arrow::draw_lines() const
     fl_line(arrowPlus90.x, arrowPlus90.y, arrow.x, arrow.y);
     fl_line(arrowMinus90.x, arrowMinus90.y, arrow.x, arrow.y);
 
+  }
+}
+/////////////////////////// Connection Points //////////////////////////////////
+namespace cp {
+  Point n(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width() / 2, r.point(0).y};
+  }
+
+  Point s(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width() / 2, r.point(0).y + r.height()};
+  }
+
+  Point e(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width(), r.point(0).y + r.height() / 2};
+  }
+
+  Point w(const Rectangle& r)
+  {
+    return Point{r.point(0).x, r.point(0).y + r.height() / 2};
+  }
+
+  Point center(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width() / 2, r.point(0).y + r.height() / 2};
+  }
+
+  Point ne(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width(), r.point(0).y};
+  }
+
+  Point se(const Rectangle& r)
+  {
+    return Point{r.point(0).x + r.width(), r.point(0).y + r.height()};
+  }
+
+  Point sw(const Rectangle& r)
+  {
+    return Point{r.point(0).x, r.point(0).y + r.height()};
+  }
+
+  Point nw(const Rectangle& r)
+  {
+    return Point{r.point(0).x, r.point(0).y};
   }
 }

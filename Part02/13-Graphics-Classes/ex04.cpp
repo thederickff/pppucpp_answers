@@ -12,9 +12,33 @@ int main()
 
   try
   {
-    //Arrow arrow0(Point{100, 200}, 50, 0);
+    Rectangle rect(Point{100,200}, 100, 100);
+    Rectangle rect2(Point{300,200}, 100, 100);
+    Rectangle rect3(Point{500,200}, 100, 100);
 
-    //win.attach(arrow0);
+    Polygon poly;
+    poly.add(cp::n(rect));
+    poly.add(cp::se(rect));
+    poly.add(cp::sw(rect));
+
+    Polygon poly2;
+    poly2.add(cp::s(rect2));
+    poly2.add(cp::ne(rect2));
+    poly2.add(cp::nw(rect2));
+
+    Polygon poly3;
+    poly3.add(cp::w(rect3));
+    poly3.add(cp::center(rect3));
+    poly3.add(cp::se(rect3));
+    poly3.add(cp::e(rect3));
+    poly3.add(cp::n(rect3));
+
+    win.attach(rect);
+    win.attach(poly);
+    win.attach(rect2);
+    win.attach(poly2);
+    win.attach(rect3);
+    win.attach(poly3);
 
     win.wait_for_button();
   }
