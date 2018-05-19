@@ -92,6 +92,26 @@ namespace cp {
   Point se(const Rectangle& r);
   Point sw(const Rectangle& r);
   Point nw(const Rectangle& r);
+
+  Point n(const Circle& c);
+  Point s(const Circle& c);
+  Point e(const Circle& c);
+  Point w(const Circle& c);
+  Point center(const Circle& c);
+  Point ne(const Circle& c);
+  Point se(const Circle& c);
+  Point sw(const Circle& c);
+  Point nw(const Circle& c);
+
+  Point n(const Ellipse& e);
+  Point s(const Ellipse& e);
+  Point e(const Ellipse& e);
+  Point w(const Ellipse& e);
+  Point center(const Ellipse& e);
+  Point ne(const Ellipse& e);
+  Point se(const Ellipse& e);
+  Point sw(const Ellipse& e);
+  Point nw(const Ellipse& e);
 }
 
 #endif // defined(__Custom__Shapes__)

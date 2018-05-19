@@ -144,4 +144,94 @@ namespace cp {
   {
     return Point{r.point(0).x, r.point(0).y};
   }
+
+  Point n(const Circle& c)
+  {
+    return Point{c.point(0).x + c.radius(), c.point(0).y};
+  }
+
+  Point s(const Circle& c)
+  {
+    return Point{c.point(0).x + c.radius(), c.point(0).y + c.radius() * 2};
+  }
+
+  Point e(const Circle& c)
+  {
+    return Point{c.point(0).x + c.radius() * 2, c.point(0).y + c.radius()};
+  }
+
+  Point w(const Circle& c)
+  {
+    return Point{c.point(0).x, c.point(0).y + c.radius()};
+  }
+
+  Point center(const Circle& c)
+  {
+    return c.center();
+  }
+
+  Point ne(const Circle& c)
+  {
+    return c.point(0);
+  }
+
+  Point se(const Circle& c)
+  {
+    return Point{c.point(0).x + c.radius() * 2, c.point(0).y + c.radius() * 2};
+  }
+
+  Point sw(const Circle& c)
+  {
+    return Point{c.point(0).x, c.point(0).y + c.radius() * 2};
+  }
+
+  Point nw(const Circle& c)
+  {
+    return Point{c.point(0).x + c.radius() * 2, c.point(0).y};
+  }
+
+  Point n(const Ellipse& e)
+  {
+    return Point{e.point(0).x + e.major(), e.point(0).y};
+  }
+
+  Point s(const Ellipse& e)
+  {
+    return Point{e.point(0).x + e.major(), e.point(0).y + e.minor() * 2};
+  }
+
+  Point e(const Ellipse& e)
+  {
+    return Point{e.point(0).x + e.major() * 2, e.point(0).y + e.minor()};
+  }
+
+  Point w(const Ellipse& e)
+  {
+    return Point{e.point(0).x, e.point(0).y + e.minor()};
+  }
+
+  Point center(const Ellipse& e)
+  {
+    return e.center();
+  }
+
+  Point ne(const Ellipse& e)
+  {
+    return Point{e.point(0).x + e.major() * 2, e.point(0).y};
+  }
+
+  Point se(const Ellipse& e)
+  {
+    return Point{e.point(0).x + e.major() * 2, e.point(0).y + e.minor() * 2};
+  }
+
+  Point sw(const Ellipse& e)
+  {
+    return Point{e.point(0).x, e.point(0).y + e.minor() * 2};
+  }
+
+  Point nw(const Ellipse& e)
+  {
+    return Point{e.point(0).x, e.point(0).y};
+  }
 }
