@@ -113,5 +113,6 @@ namespace cp {
   Point sw(const Ellipse& e);
   Point nw(const Ellipse& e);
 }
+/////////////////////////// Connection Points //////////////////////////////////
 
 #endif // defined(__Custom__Shapes__)
