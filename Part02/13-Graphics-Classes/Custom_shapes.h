@@ -46,6 +46,8 @@ struct Box : Shape
   Box(Point p, int w, int h);
 
   void draw_lines() const;
+  int w() const { return width; }
+  int h() const { return height; }
 private:
   int width;
   int height;
@@ -113,6 +115,14 @@ namespace cp {
   Point sw(const Ellipse& e);
   Point nw(const Ellipse& e);
 }
-/////////////////////////// Connection Points //////////////////////////////////
+///////////////////////////// Box_with_label ///////////////////////////////////
+struct Box_with_label : Box
+{
+  Box_with_label(Point p, const string& s);
+
+  void draw_lines() const;
+private:
+  string str;
+};
 
 #endif // defined(__Custom__Shapes__)

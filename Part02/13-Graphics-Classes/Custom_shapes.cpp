@@ -235,3 +235,17 @@ namespace cp {
     return Point{e.point(0).x, e.point(0).y};
   }
 }
+
+///////////////////////////// Box_with_label ///////////////////////////////////
+
+Box_with_label::Box_with_label(Point p, const string& s)
+: Box(p, (s.size() * 3) + 30, 20), str(s)
+{
+  add(p);
+}
+
+void Box_with_label::draw_lines() const
+{
+  Box::draw_lines();
+  fl_draw(str.c_str(), point(0).x + 16, point(0).y + 25);
+}
