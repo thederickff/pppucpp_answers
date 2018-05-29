@@ -125,4 +125,18 @@ private:
   string str;
 };
 
+//////////////////////////// Regular_hexagon ///////////////////////////////////
+struct Regular_hexagon : Polygon
+{
+  Regular_polygon(Point cc, int dd);
+
+  void draw_lines() const;
+
+  Point center() const { return c; }
+  int distance() const { return d; }
+private:
+  Point c;
+  int d;
+};
+
 #endif // defined(__Custom__Shapes__)

@@ -249,3 +249,23 @@ void Box_with_label::draw_lines() const
   Box::draw_lines();
   fl_draw(str.c_str(), point(0).x + 16, point(0).y + 25);
 }
+
+//////////////////////////// Regular_hexagon ///////////////////////////////////
+
+Regular_hexagon::Regular_hexagon(Point cc, int dd)
+: c(cc), d(dd)
+{
+  for (int i = 0; i < 360; i += 60)
+  {
+    Point point {
+      int(cos(radian(i) - pi / 2) * distance) + center.x,
+      abs(int(sin(radian(i) - pi / 2) * distance) + center.y)
+    };
+    add(point);
+  }
+}
+
+void Regular_hexagon::draw_lines() const
+{
+  Polygon::draw_lines();
+}
