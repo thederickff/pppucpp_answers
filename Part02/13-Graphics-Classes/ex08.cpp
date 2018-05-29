@@ -3,9 +3,11 @@
   all sides of equal length). Use the center and the distance from the center to
   a corner point as constructor arguments.
 */
+#include "Custom_shapes.h"
+
 int main()
 {
-  Simple_window win(Point{250, 10}, win_width, win_height, "Exercise 10 - Chapter 13: Graphics Classes");
+  Simple_window win(Point{250, 10}, win_width, win_height, "Exercise 08 - Chapter 13: Graphics Classes");
 
   try
   {

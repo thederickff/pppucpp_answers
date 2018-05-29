@@ -126,9 +126,10 @@ private:
 };
 
 //////////////////////////// Regular_hexagon ///////////////////////////////////
+
 struct Regular_hexagon : Polygon
 {
-  Regular_polygon(Point cc, int dd);
+  Regular_hexagon(Point cc, int dd);
 
   void draw_lines() const;
 

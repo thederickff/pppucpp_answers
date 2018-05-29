@@ -258,8 +258,8 @@ Regular_hexagon::Regular_hexagon(Point cc, int dd)
   for (int i = 0; i < 360; i += 60)
   {
     Point point {
-      int(cos(radian(i) - pi / 2) * distance) + center.x,
-      abs(int(sin(radian(i) - pi / 2) * distance) + center.y)
+      int(cos(radian(i) - pi / 2) * d) + c.x,
+      abs(int(sin(radian(i) - pi / 2) * d) + c.y)
     };
     add(point);
   }
