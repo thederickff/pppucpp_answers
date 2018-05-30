@@ -140,4 +140,20 @@ private:
   int d;
 };
 
+//////////////////////////// Regular_polygon ///////////////////////////////////
+
+struct Regular_polygon : Polygon
+{
+  Regular_polygon(Point c, int s, int d);
+
+  void draw_lines() const;
+
+  int getSides() const { return sides; }
+  int getDistance() const { return distance; }
+private:
+  Point center;
+  int sides;
+  int distance;
+};
+
 #endif // defined(__Custom__Shapes__)

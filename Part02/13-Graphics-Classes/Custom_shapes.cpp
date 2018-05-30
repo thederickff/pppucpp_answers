@@ -269,3 +269,25 @@ void Regular_hexagon::draw_lines() const
 {
   Polygon::draw_lines();
 }
+
+//////////////////////////// Regular_polygon ///////////////////////////////////
+
+Regular_polygon::Regular_polygon(Point c, int s, int d)
+: center(c), sides(s), distance(d)
+{
+  if (s < 3) error("Bad Regular_hexagon: number of sides given is less than three.");
+  int total = 360;
+  for (int i = 0; i < total; i += (total / sides))
+  {
+    Point point {
+      int(cos(radian(i) - pi / 2) * distance) + center.x,
+      abs(int(sin(radian(i) - pi / 2) * distance) + center.y)
+    };
+    add(point);
+  }
+}
+
+void Regular_polygon::draw_lines() const
+{
+  Polygon::draw_lines();
+}
