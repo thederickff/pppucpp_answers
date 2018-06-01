@@ -55,6 +55,7 @@ private:
 
 ////////////////////////////////// Arrow ///////////////////////////////////////
 constexpr double pi = 3.14159265359;
+constexpr int angcirc = 360;
 
 inline double radian(int angle)
 {
@@ -64,13 +65,13 @@ inline double radian(int angle)
 inline int angleAdd(int a, int b)
 {
   int angle = a + b;
-  if (angle > 360) angle -= 360;
+  if (angle > angcirc) angle -= angcirc;
   return angle;
 }
 inline int angleSub(int a, int b)
 {
   int angle = a - b;
-  if (angle < 0) angle += 360;
+  if (angle < 0) angle += angcirc;
   return angle;
 }
 
@@ -154,6 +155,22 @@ private:
   Point center;
   int sides;
   int distance;
+};
+
+//////////////////////////// Super_Ellipse /////////////////////////////////////
+
+struct Super_Ellipse : Open_polyline
+{
+    Super_Ellipse(Point p, int ww, int hh);
+
+    int sign(double w);
+    void draw_lines() const;
+
+    int width() const { return w; }
+    int height() const { return h; }
+private:
+  int w;
+  int h;
 };
 
 #endif // defined(__Custom__Shapes__)

@@ -276,8 +276,8 @@ Regular_polygon::Regular_polygon(Point c, int s, int d)
 : center(c), sides(s), distance(d)
 {
   if (s < 3) error("Bad Regular_hexagon: number of sides given is less than three.");
-  int total = 360;
-  for (int i = 0; i < total; i += (total / sides))
+  int times = angcirc / sides;
+  for (int i = 0; i < angcirc; i += times)
   {
     Point point {
       int(cos(radian(i) - pi / 2) * distance) + center.x,
@@ -290,4 +290,44 @@ Regular_polygon::Regular_polygon(Point c, int s, int d)
 void Regular_polygon::draw_lines() const
 {
   Polygon::draw_lines();
+}
+
+
+//////////////////////////// Super_Ellipse /////////////////////////////////////
+
+Super_Ellipse::Super_Ellipse(Point p, int ww, int hh)
+: w(ww), h(hh)
+{
+  constexpr double a = 1;
+  constexpr double b = 0.75;
+  constexpr double m = 0.5;
+  constexpr double n = 0.5;
+  constexpr int times = angcirc / 90;
+  for (int i = 0; i < angcirc; i += times)
+  {
+    double x = cos(radian(i));
+    double y = sin(radian(i));
+
+    x = pow(abs(x), 2 / m) * a * sign(x);
+    y = pow(abs(y), 2 / n) * b * sign(y);
+
+    Point pt {
+      int(w * x) + p.x,
+      abs(int(h * y) + p.y)
+    };
+
+    add(pt);
+  }
+}
+
+int Super_Ellipse::sign(double w)
+{
+  if (w > 0) return +1;
+  if (w < 0) return -1;
+  return 0;
+}
+
+void Super_Ellipse::draw_lines() const
+{
+  Open_polyline::draw_lines();
 }
