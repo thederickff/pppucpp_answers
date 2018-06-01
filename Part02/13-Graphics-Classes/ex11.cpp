@@ -2,7 +2,7 @@
   Draw a 300-by-200-pixel ellipse. Draw a 400-pixel-long x axis and a
   300-pixel-long y axis through the center of the ellipse. Mark the foci.
   Mark a point on the ellipse that is not on one of the axes. Draw the two
-  lines from the fonci to the point.
+  lines from the foci to the point.
 */
 #include "Custom_shapes.h"
 
