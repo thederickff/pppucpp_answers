@@ -12,9 +12,23 @@ int main()
 
   try
   {
-    Super_Ellipse se(Point{300, 200}, 500, 50);
+    Ellipse el(Point{380, 350}, 300, 200);
+    Axis xa {Axis::x, Point{el.center().x, el.center().y}, 400, 10, "x"};
+    Axis ya {Axis::y, Point{el.center().x, el.center().y}, 300, 10, "y"};
 
-    win.attach(se);
+    Point f1 = el.focus1();
+    Point f2 = el.focus2();
+    Point out(el.center().x - el.major() / 2, el.center().y + el.minor() / 2);
+
+    Marked_polyline mpl {"FOF"};
+    mpl.add(f1);
+    mpl.add(out);
+    mpl.add(f2);
+
+    win.attach(xa);
+    win.attach(ya);
+    win.attach(el);
+    win.attach(mpl);
     win.wait_for_button();
   }
   catch (const exception& e)
