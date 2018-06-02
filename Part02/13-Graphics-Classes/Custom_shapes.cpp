@@ -265,11 +265,6 @@ Regular_hexagon::Regular_hexagon(Point cc, int dd)
   }
 }
 
-void Regular_hexagon::draw_lines() const
-{
-  Polygon::draw_lines();
-}
-
 //////////////////////////// Regular_polygon ///////////////////////////////////
 
 Regular_polygon::Regular_polygon(Point c, int s, int d)
@@ -285,11 +280,6 @@ Regular_polygon::Regular_polygon(Point c, int s, int d)
     };
     add(point);
   }
-}
-
-void Regular_polygon::draw_lines() const
-{
-  Polygon::draw_lines();
 }
 
 
@@ -327,12 +317,6 @@ int Super_Ellipse::sign(double w)
   return 0;
 }
 
-void Super_Ellipse::draw_lines() const
-{
-  Open_polyline::draw_lines();
-}
-
-
 //////////////////////////// Right_triangle ////////////////////////////////////
 Right_triangle::Right_triangle(Point p, int ssa, int ssb, int aa)
 : sa(ssa), sb(ssb), a(aa)
@@ -350,9 +334,4 @@ Right_triangle::Right_triangle(Point p, int ssa, int ssb, int aa)
 
   add(item_a);
   add(item_b);
-}
-
-void Right_triangle::draw_lines() const
-{
-  Polygon::draw_lines();
 }

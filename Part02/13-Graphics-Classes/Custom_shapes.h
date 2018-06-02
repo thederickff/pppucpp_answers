@@ -132,8 +132,6 @@ struct Regular_hexagon : Polygon
 {
   Regular_hexagon(Point cc, int dd);
 
-  void draw_lines() const;
-
   Point center() const { return c; }
   int distance() const { return d; }
 private:
@@ -146,8 +144,6 @@ private:
 struct Regular_polygon : Polygon
 {
   Regular_polygon(Point c, int s, int d);
-
-  void draw_lines() const;
 
   int getSides() const { return sides; }
   int getDistance() const { return distance; }
@@ -164,8 +160,6 @@ struct Super_Ellipse : Open_polyline
     Super_Ellipse(Point p, int ww, int hh);
 
     int sign(double w);
-    void draw_lines() const;
-
     int width() const { return w; }
     int height() const { return h; }
 private:
@@ -178,8 +172,6 @@ struct Right_triangle : Polygon
 {
   Right_triangle(Point p, int ssa, int ssb, int ang);
 
-  void draw_lines() const;
-
   int size_a() const { return sa; }
   int size_b() const { return sb; }
   int angle() const { return a; }
@@ -187,6 +179,13 @@ private:
   int sa;
   int sb;
   int a;
+};
+
+////////////////////////////////// Poly ////////////////////////////////////////
+
+struct Poly : Polygon
+{
+  Poly(Vector_ref<Point> p) { for (int i = 0; i < p.size(); ++i) add(p[i]); }
 };
 
 #endif // defined(__Custom__Shapes__)
