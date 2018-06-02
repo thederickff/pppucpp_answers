@@ -62,15 +62,15 @@ inline double radian(int angle)
   return angle * pi / 180;
 }
 
-inline int angleAdd(int a, int b)
+inline double angleAdd(double a, double b)
 {
-  int angle = a + b;
+  double angle = a + b;
   if (angle > angcirc) angle -= angcirc;
   return angle;
 }
-inline int angleSub(int a, int b)
+inline double angleSub(double a, double b)
 {
-  int angle = a - b;
+  double angle = a - b;
   if (angle < 0) angle += angcirc;
   return angle;
 }
