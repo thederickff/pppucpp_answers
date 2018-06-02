@@ -173,4 +173,20 @@ private:
   int h;
 };
 
+//////////////////////////// Right_triangle ////////////////////////////////////
+struct Right_triangle : Polygon
+{
+  Right_triangle(Point p, int ssa, int ssb, int ang);
+
+  void draw_lines() const;
+
+  int size_a() const { return sa; }
+  int size_b() const { return sb; }
+  int angle() const { return a; }
+private:
+  int sa;
+  int sb;
+  int a;
+};
+
 #endif // defined(__Custom__Shapes__)

@@ -331,3 +331,28 @@ void Super_Ellipse::draw_lines() const
 {
   Open_polyline::draw_lines();
 }
+
+
+//////////////////////////// Right_triangle ////////////////////////////////////
+Right_triangle::Right_triangle(Point p, int ssa, int ssb, int aa)
+: sa(ssa), sb(ssb), a(aa)
+{
+  add(p);
+  Point item_a {
+    int(cos(radian(a)) * sa) + point(0).x,
+    abs(int(sin(radian(a)) * sb) + point(0).y)
+  };
+
+  Point item_b {
+    int(cos(radian(a + 90)) * sb) + point(0).x,
+    abs(int(sin(radian(a + 90)) * sb) + point(0).y)
+  };
+
+  add(item_a);
+  add(item_b);
+}
+
+void Right_triangle::draw_lines() const
+{
+  Polygon::draw_lines();
+}
