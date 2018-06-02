@@ -335,3 +335,27 @@ Right_triangle::Right_triangle(Point p, int ssa, int ssb, int aa)
   add(item_a);
   add(item_b);
 }
+
+///////////////////////////////// Start ////////////////////////////////////////
+Star::Star(Point c, int pp, int ss)
+: p(pp), s(ss)
+{
+  int steps = angcirc / (p * 2);
+  bool corner = false;
+  for (int i = 0; i < angcirc; i += steps) {
+    int distance;
+    if (corner) {
+      distance = s;
+    } else {
+      distance = s / 2;
+    }
+
+    Point a {
+      int(cos(radian(angleAdd(i, 18))) * distance) + c.x,
+      abs(int(sin(radian(angleAdd(i, 18))) * distance) + c.y)
+    };
+
+    add(a);
+    corner = !corner;
+  }
+}

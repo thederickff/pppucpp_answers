@@ -188,4 +188,17 @@ struct Poly : Polygon
   Poly(initializer_list<Point> ps) { for (Point p : ps) add(p); }
 };
 
+///////////////////////////////// Start ////////////////////////////////////////
+
+struct Star : Polygon
+{
+
+  Star(Point c, int pp, int ss);
+  int points() const { return p; }
+  int size() const { return s; }
+private:
+  int p;
+  int s;
+};
+
 #endif // defined(__Custom__Shapes__)
