@@ -11,14 +11,14 @@ int main()
 
   try
   {
-    Poly poly(Vector_ref<Point>{
-      new Point{20, 20},
-      new Point{20, 40},
-      new Point{40, 40},
-      new Point{40, 20}
+    Poly poly({
+      Point{20, 20},
+      Point{20, 40},
+      Point{40, 40},
+      Point{40, 20}
     });
     win.attach(poly);
-    
+
     win.wait_for_button();
   }
   catch (const exception& e)

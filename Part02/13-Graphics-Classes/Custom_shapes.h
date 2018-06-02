@@ -185,7 +185,7 @@ private:
 
 struct Poly : Polygon
 {
-  Poly(Vector_ref<Point> p) { for (int i = 0; i < p.size(); ++i) add(p[i]); }
+  Poly(initializer_list<Point> ps) { for (Point p : ps) add(p); }
 };
 
 #endif // defined(__Custom__Shapes__)
