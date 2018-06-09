@@ -1,4 +1,5 @@
 /*
+                            Drill - Chapter 14
   1. Define a class B1 with virtual function vf() and a non-virtual function f().
      Define both of these functions within class B1. Implement each function to
      output its name (e.g, B1::vf()). Make the functions public. Make a B1 object
@@ -6,6 +7,10 @@
 
   2. Derive a class D1 from B1 and override vf(). Make a D1 object and call vf()
      and f() for it.
+
+  3. Define a reference to B1 (a B1&) and initialize that to the D1 object you
+     just defined. Call vf() and f() for that reference.
+
 */
 #include <iostream>
 
@@ -43,11 +48,16 @@ int main()
 
   b1.vf();
   b1.f();
-
+  std::cout << "--" << std::endl;
   D1 d1;
 
   d1.vf();
   d1.f();
+  std::cout << "--" << std::endl;
+  B1& br = d1;
+
+  br.vf();
+  br.f();
 
   return 0;
 }
