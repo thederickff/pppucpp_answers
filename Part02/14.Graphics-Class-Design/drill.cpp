@@ -19,6 +19,13 @@
   6. Define a class D2 derived from D1 and override pvf() in D2. Make an object
      of class D2 and invoke f(), vf(), and pvf() for it.
 
+  7. Define a class B2 with a pure virtual function pvf(). Define a class D21
+     with a string data member and a member function that overrides pvf();
+     D21::pvf() should output the value of the string. Define a class D22 that
+     is just like D21 except that its data member is an int. Define function f()
+     that takes a B2& argument and calls pvf() for its argument. Call f() with a
+     D21 and a D22.
+
 */
 #include <iostream>
 
@@ -42,6 +49,32 @@ class D2 : public D1
 {
 public:
   void pvf() override;
+};
+
+class B2
+{
+public:
+  virtual void pvf() = 0;
+};
+
+class D21 : public B2
+{
+public:
+  D21();
+
+  void pvf() override;
+private:
+  std::string member;
+};
+
+class D22 : public B2
+{
+public:
+  D22();
+
+  void pvf() override;
+private:
+  int member;
 };
 
 void B1::vf()
@@ -74,6 +107,31 @@ void D2::pvf()
   std::cout << "D2::pvf()" << std::endl;
 }
 
+D21::D21()
+: member("D21's string")
+{
+}
+
+void D21::pvf()
+{
+    std::cout << member << std::endl;
+}
+
+D22::D22()
+: member(2222)
+{
+}
+
+void D22::pvf()
+{
+  std::cout << member << std::endl;
+}
+
+void f(B2& b2)
+{
+  b2.pvf();
+}
+
 int main()
 {
   std::cout << "- B1 object -" << std::endl;
@@ -101,6 +159,11 @@ int main()
   d2.pvf();
   d2.vf();
   d2.f();
+  std::cout << "- B2 objects -" << std::endl;
+  D21 d21;
+  D22 d22;
+  f(d21);
+  f(d22);
 
   return 0;
 }
