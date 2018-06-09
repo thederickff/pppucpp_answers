@@ -16,6 +16,9 @@
   5. Add a pure virtual function called pvf() to B1 and try to repeat 1-4.
      Explain the result.
 
+  6. Define a class D2 derived from D1 and override pvf() in D2. Make an object
+     of class D2 and invoke f(), vf(), and pvf() for it.
+
 */
 #include <iostream>
 
@@ -33,6 +36,12 @@ public:
   void pvf() override;
   void vf() override;
   void f();
+};
+
+class D2 : public D1
+{
+public:
+  void pvf() override;
 };
 
 void B1::vf()
@@ -60,6 +69,11 @@ void D1::f()
   std::cout << "D1::f()" << std::endl;
 }
 
+void D2::pvf()
+{
+  std::cout << "D2::pvf()" << std::endl;
+}
+
 int main()
 {
   std::cout << "- B1 object -" << std::endl;
@@ -80,6 +94,13 @@ int main()
   br.pvf();
   br.vf();
   br.f();
+
+  std::cout << "- D2 object -" << std::endl;
+  D2 d2;
+
+  d2.pvf();
+  d2.vf();
+  d2.f();
 
   return 0;
 }
