@@ -12,12 +12,17 @@
      just defined. Call vf() and f() for that reference.
 
   4. Now define a function called f() for D1 and repeat 1-3. Explain the results.
+
+  5. Add a pure virtual function called pvf() to B1 and try to repeat 1-4.
+     Explain the result.
+
 */
 #include <iostream>
 
 class B1
 {
 public:
+  virtual void pvf() = 0;
   virtual void vf();
   void f();
 };
@@ -25,6 +30,7 @@ public:
 class D1 : public B1
 {
 public:
+  void pvf() override;
   void vf() override;
   void f();
 };
@@ -37,6 +43,11 @@ void B1::vf()
 void B1::f()
 {
   std::cout << "B1::f()" << std::endl;
+}
+
+void D1::pvf()
+{
+  std::cout << "D1::pvf()" << std::endl;
 }
 
 void D1::vf()
@@ -52,18 +63,21 @@ void D1::f()
 int main()
 {
   std::cout << "- B1 object -" << std::endl;
-  B1 b1;
+  // B1 b1; not initializable has pure virtual function
 
-  b1.vf();
-  b1.f();
+  // b1.pvf();
+  // b1.vf();
+  // b1.f();
   std::cout << "- D1 object -" << std::endl;
   D1 d1;
 
+  d1.pvf();
   d1.vf();
   d1.f();
   std::cout << "- B1& to D1 object -" << std::endl;
   B1& br = d1;
 
+  br.pvf();
   br.vf();
   br.f();
 
