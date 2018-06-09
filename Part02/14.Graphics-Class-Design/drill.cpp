@@ -11,6 +11,7 @@
   3. Define a reference to B1 (a B1&) and initialize that to the D1 object you
      just defined. Call vf() and f() for that reference.
 
+  4. Now define a function called f() for D1 and repeat 1-3. Explain the results.
 */
 #include <iostream>
 
@@ -25,6 +26,7 @@ class D1 : public B1
 {
 public:
   void vf() override;
+  void f();
 };
 
 void B1::vf()
@@ -42,18 +44,24 @@ void D1::vf()
   std::cout << "D1::vf()" << std::endl;
 }
 
+void D1::f()
+{
+  std::cout << "D1::f()" << std::endl;
+}
+
 int main()
 {
+  std::cout << "- B1 object -" << std::endl;
   B1 b1;
 
   b1.vf();
   b1.f();
-  std::cout << "--" << std::endl;
+  std::cout << "- D1 object -" << std::endl;
   D1 d1;
 
   d1.vf();
   d1.f();
-  std::cout << "--" << std::endl;
+  std::cout << "- B1& to D1 object -" << std::endl;
   B1& br = d1;
 
   br.vf();
