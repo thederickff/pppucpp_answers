@@ -94,7 +94,7 @@ void FrownyWithHat::draw_lines() const
 {
   Frowny::draw_lines();
 
-  if (fill_color().visibility()) { // fill
+  if (color().visibility()) { // fill
     fl_arc(point(6).x, point(6).y, r * 2, r / 1.2, 0, 360);
     fl_rect(point(6).x + r / 2, point(6).y - 30, r, 40);
   }
@@ -103,5 +103,36 @@ void FrownyWithHat::draw_lines() const
     fl_color(Color::dark_red);
     fl_pie(point(6).x, point(6).y, r * 2, r / 1.2, 0, 360);
     fl_rectf(point(6).x + r / 2, point(6).y - 30, r, 40);
+  }
+}
+
+///////////////////////////// Exercise 05 //////////////////////////////////////
+Stripped_rectangle::Stripped_rectangle(Point p, int w, int h)
+: Rectangle(p, w, h)
+{
+
+}
+
+
+void Stripped_rectangle::draw_lines() const
+{
+  if (fill_color().visibility()) {
+    int h = height();
+    int color = fill_color().as_int();
+    for (int i = 0; i < h; ++i)
+    {
+      if (i % 2 == 0) {
+        fl_color(color);
+      } else {
+        fl_color(color + i);
+        i++;
+      }
+
+      fl_rectf(point(0).x, point(0).y + i, width(), 1);
+    }
+  }
+
+  if (color().visibility()) {
+    fl_rect(point(0).x, point(0).y, width(), height());
   }
 }

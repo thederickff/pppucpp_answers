@@ -61,4 +61,14 @@ public:
   void move(int dx, int dy) { /* do nothing */}
 };
 
+///////////////////////////// Exercise 05 //////////////////////////////////////
+class Stripped_rectangle : public Rectangle
+{
+public:
+  Stripped_rectangle(Point p, int w, int h);
+
+  void draw_lines() const;
+};
+
+
 #endif // defined(__Custom__Objects__)
