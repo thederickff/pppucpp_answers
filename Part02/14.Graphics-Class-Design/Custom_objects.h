@@ -1,4 +1,4 @@
-#ifndef __Custom__Objects__
+  #ifndef __Custom__Objects__
 #define __Custom__Objects__
 
 #include "Simple_window.h"
@@ -70,5 +70,11 @@ public:
   void draw_lines() const;
 };
 
+///////////////////////////// Exercise 06 //////////////////////////////////////
+class Stripped_circle : public Circle
+{
+public:
+  Stripped_circle(Point p, int r);
+};
 
 #endif // defined(__Custom__Objects__)
