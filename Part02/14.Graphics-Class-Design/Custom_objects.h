@@ -71,10 +71,38 @@ public:
 };
 
 ///////////////////////////// Exercise 06 //////////////////////////////////////
-class Stripped_circle : public Circle
+constexpr double pi = 3.14159265359;
+constexpr int angcirc = 360;
+
+inline double radian(int angle)
+{
+  return angle * pi / 180;
+}
+
+inline double angleAdd(double a, double b)
+{
+  double angle = a + b;
+  if (angle > angcirc) angle -= angcirc;
+  return angle;
+}
+inline double angleSub(double a, double b)
+{
+  double angle = a - b;
+  if (angle < 0) angle += angcirc;
+  return angle;
+}
+
+
+class Stripped_circle : public Shape
 {
 public:
-  Stripped_circle(Point p, int r);
+  Stripped_circle(Point p, int rr);
+
+  void draw_lines() const;
+
+  int radius() const { return r; }
+private:
+  int r;
 };
 
 #endif // defined(__Custom__Objects__)

@@ -124,7 +124,7 @@ void Stripped_rectangle::draw_lines() const
       if (i % 2 == 0) {
         fl_color(color);
       } else {
-        fl_color(color + i);
+        fl_color(color * 3 / 2);
         i++;
       }
 
@@ -134,5 +134,35 @@ void Stripped_rectangle::draw_lines() const
 
   if (color().visibility()) {
     fl_rect(point(0).x, point(0).y, width(), height());
+  }
+}
+
+
+Stripped_circle::Stripped_circle(Point p, int rr)
+: r(rr)
+{
+  add(Point{ p.x - r, p.y - r });
+}
+
+void Stripped_circle::draw_lines() const
+{
+  if (fill_color().visibility())
+  {
+    for (int i = 90; i <= 270; ++i)
+    {
+      if (i % 2 == 0)
+        fl_color(fill_color().as_int());
+      else
+        fl_color(fill_color().as_int() * 3 / 2);
+      int y = abs(int(sin(radian(i)) * r) + point(0).y + r);
+      int radius = abs(int(cos(radian(i)) * r));
+
+      fl_rectf(point(0).x + r - radius, y, radius * 2, 2);
+    }
+  }
+
+  if (color().visibility()) {
+    fl_color(color().as_int());
+    fl_arc(point(0).x,point(0).y,r+r,r+r,0,360);
   }
 }
