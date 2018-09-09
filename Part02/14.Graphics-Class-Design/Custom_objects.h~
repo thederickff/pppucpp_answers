@@ -106,15 +106,10 @@ private:
 };
 
 ///////////////////////////// Exercise 07 //////////////////////////////////////
-bool lie_on_line(Point p1, Point p2, Point current); // Checks if the point lies on the given line
-
-bool line_segment_intersection(Point p1, Point p2, Point p3, Point p4, Point &intersect);
-
-struct Striped_closed_polyline : Closed_polyline {
-	Striped_closed_polyline(int d);
-	void draw_lines() const;
-private:
-	int density;
+class Striped_closed_polyline : public Closed_polyline
+{
+public:
+    Striped_closed_polyline();
 };
 
 #endif // defined(__Custom__Objects__)
