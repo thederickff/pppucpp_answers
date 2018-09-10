@@ -137,7 +137,7 @@ void Stripped_rectangle::draw_lines() const
   }
 }
 
-
+///////////////////////////// Exercise 06 //////////////////////////////////////
 Stripped_circle::Stripped_circle(Point p, int rr)
 : r(rr)
 {
@@ -167,7 +167,7 @@ void Stripped_circle::draw_lines() const
   }
 }
 
-///////////////////////////// Exercise 06 //////////////////////////////////////
+///////////////////////////// Exercise 07 //////////////////////////////////////
 bool lie_on_line(Point p1, Point p2, Point current)
 {
     int dxc = current.x - p1.x;
@@ -282,21 +282,27 @@ void Striped_closed_polyline::draw_lines() const
     }
 }
 
+///////////////////////////// Exercise 08 //////////////////////////////////////
+Octagon::Octagon(Point p, int rr)
+    : r(rr)
+{
+    int size = angcirc / 8;
+    
+    for (int i = 0; i < 360; i += size)
+    {
+        Point point {
+            int(cos(radian(i)) * r) + p.x,
+            abs(int(sin(radian(i)) * r) - p.y)
+        };
 
+        add(point);
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Octagon::draw_lines() const
+{
+    Closed_polyline::draw_lines();
+}
 
 
 

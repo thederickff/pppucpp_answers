@@ -1,23 +1,18 @@
 /*
-    Define a Striped_closed_polyline using the technique from Striped_rectangle
-    (this requires some algorithmic inventiveness).
+    Define a class to be regular octagon. Write a test that exercises all of its 
+    functions (as defined by you or inherited from Shape).
 */
 #include "Custom_objects.h"
 
 int main()
 {
-  Simple_window win(Point{250, 50}, win_width, win_height, "Exercise 07 - Chapter 14: Graphics Class Design");
+  Simple_window win(Point{250, 50}, win_width, win_height, "Exercise 08 - Chapter 14: Graphics Class Design");
 
   try
   {
-    Striped_closed_polyline scp(2);
-    scp.add({100, 200});
-    scp.add({200, 200});
-    scp.add({100, 150});
-    scp.add({150, 100});
-    scp.add({300, 150});
+    Octagon oct(Point{200, 200}, 50);
 
-    win.attach(scp);
+    win.attach(oct);
     win.wait_for_button();
   }
   catch (const exception& e)

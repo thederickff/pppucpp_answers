@@ -100,7 +100,7 @@ public:
 
   void draw_lines() const;
 
-  int radius() const { return r; }
+  inline int radius() const { return r; }
 private:
   int r;
 };
@@ -115,6 +115,18 @@ struct Striped_closed_polyline : Closed_polyline {
 	void draw_lines() const;
 private:
 	int density;
+};
+
+///////////////////////////// Exercise 08 //////////////////////////////////////
+class Octagon : public Closed_polyline
+{
+public:
+    Octagon(Point p, int rr);
+    void draw_lines() const;
+    
+    inline int radius() const { return r; }
+private:
+    int r;
 };
 
 #endif // defined(__Custom__Objects__)
