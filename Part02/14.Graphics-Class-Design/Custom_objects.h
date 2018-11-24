@@ -155,4 +155,24 @@ private:
   Vector_ref<Shape> shapes; 
 };
 
+///////////////////////////// Exercise 10 //////////////////////////////////////
+class Pseudo_window : public Shape
+{
+public:
+  Pseudo_window(Point xy, int width, int height, const string& s);
+
+  void draw_lines() const;
+  int w() const { return width; }
+  int h() const { return height; }
+private:
+  void draw_border() const;
+  void draw_title() const;
+  void draw_content() const;
+
+  int width;
+  int height;
+  string str;
+  Image image;
+};
+
 #endif // defined(__Custom__Objects__)

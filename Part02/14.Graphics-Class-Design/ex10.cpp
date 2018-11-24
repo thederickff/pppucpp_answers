@@ -13,8 +13,9 @@ int main()
 
     try
     {
-        
+        Pseudo_window pw(Point{20, 20}, 200, 200, "My Window");
 
+        win.attach(pw);
         win.wait_for_button();
     }
     catch (const exception &e)

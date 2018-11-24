@@ -346,3 +346,63 @@ void Group::move(int dx, int dy)
     shapes[i].move(dx, dy);
   }
 }
+
+///////////////////////////// Exercise 10 //////////////////////////////////////
+Pseudo_window::Pseudo_window(Point xy, int w, int h, const string& s)
+: width(w), height(h), str(s), image(Point{xy.x + width / 3 , xy.y + height / 2 + 10}, "friend.jpg")
+{
+  if (w <= 0 || h <= 0)
+    error("Bad box: non-positive side");
+
+  add(xy);
+}
+
+void Pseudo_window::draw_lines() const
+{
+  if (color().visibility())
+  {
+    draw_border();
+    draw_title();
+    draw_content();
+  }
+}
+
+void Pseudo_window::draw_border() const
+{
+    Point c1{point(0).x, point(0).y};
+    Point c2{point(0).x + width, point(0).y};
+    Point c3{point(0).x, point(0).y + height};
+    Point c4{point(0).x + width, point(0).y + height};
+
+    fl_arc(c1.x, c1.y, width, height, 90, 180);
+    fl_arc(c2.x, c2.y, width, height, 0, 90);
+    fl_arc(c3.x, c3.y, width, height, 180, 270);
+    fl_arc(c4.x, c4.y, width, height, 270, 360);
+
+    // Top left-right 
+    fl_line(c1.x+width/2, c1.y, c2.x+width/2, c2.y);
+    // Right top-bottom
+    fl_line(c2.x+width, c2.y+height/2, c4.x+width, c4.y+height/2);
+    // Left top-bottom
+    fl_line(c1.x, c1.y+height/2, c3.x, c3.y+height/2);
+    // Bottom legt-right
+    fl_line(c3.x+width/2, c3.y+height, c4.x+width/2, c4.y+height);
+}
+
+void Pseudo_window::draw_title() const
+{
+  int yPos = point(0).y + height / 2;
+
+  // title
+  fl_draw(str.c_str(), point(0).x + width / 2, point(0).y + height / 4);
+  fl_line(point(0).x, yPos, point(0).x+width*2, yPos);
+  // control icons
+  fl_arc(point(0).x + width / 5 + 10, point(0).y + height / 5, 10, 10, 0, 360);
+  fl_arc(point(0).x + width / 5 + 24, point(0).y + height / 5, 10, 10, 0, 360);
+  fl_arc(point(0).x + width / 5 + 38, point(0).y + height / 5, 10, 10, 0, 360);
+}
+
+void Pseudo_window::draw_content() const
+{
+  image.draw_lines();
+}
