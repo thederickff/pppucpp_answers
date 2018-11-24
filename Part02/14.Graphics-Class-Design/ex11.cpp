@@ -15,6 +15,9 @@ int main()
 
     try
     {
+        Binary_tree binary(Point{400, 130}, 7);
+
+        win.attach(binary);
         win.wait_for_button();
     }
     catch (const exception &e)

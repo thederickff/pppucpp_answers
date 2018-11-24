@@ -164,6 +164,7 @@ public:
   void draw_lines() const;
   int w() const { return width; }
   int h() const { return height; }
+
 private:
   void draw_border() const;
   void draw_title() const;
@@ -173,6 +174,30 @@ private:
   int height;
   string str;
   Image image;
+};
+
+///////////////////////////// Exercise 11 //////////////////////////////////////
+template<class Base, class T>
+inline bool instanceOf(const T *t)
+{
+  return dynamic_cast<const Base*>(t) != nullptr;
+}
+
+class Binary_tree : public Shape
+{
+public:
+  Binary_tree(Point xy, int level);
+
+  void constructNodes();
+
+  Shape* newNode(Point xy);
+  
+  void draw_lines() const;
+
+private:
+  int m_Level;
+  Vector_ref<Shape> m_Nodes;
+  Vector_ref<Line> m_Lines;
 };
 
 #endif // defined(__Custom__Objects__)

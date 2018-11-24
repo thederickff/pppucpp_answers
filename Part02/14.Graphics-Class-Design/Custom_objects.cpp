@@ -406,3 +406,81 @@ void Pseudo_window::draw_content() const
 {
   image.draw_lines();
 }
+
+///////////////////////////// Exercise 11 //////////////////////////////////////
+Binary_tree::Binary_tree(Point xy, int level)
+: m_Level(level)
+{
+  add(xy);
+  constructNodes();
+}
+
+void Binary_tree::constructNodes()
+{
+  Point root = point(0);
+  int offsetX = 0;
+  int offsetY = 0;
+
+  int offsetLevel = 0;
+  int exp = 1;
+
+  int parent_index = 0;
+  bool flag = false;
+
+  for (int i = 0; i < m_Level; ++i)
+  {
+    int size = m_Nodes.size();
+
+    if (size == 0)
+    {
+      Shape* shape = newNode(root);
+      shape->set_fill_color(Color::white);
+      m_Nodes.push_back(shape);
+      continue;
+    }
+
+    offsetY += 40;
+  
+    if (i > 1) {
+      offsetLevel += exp-1;
+      exp *= 2;
+    }
+  
+    offsetX -= 15 * (i+offsetLevel);
+
+    for (int j = 0; j <= size; ++j)
+    {
+      Shape* shape = newNode(Point{root.x + j * 30 + offsetX, root.y + offsetY});
+      shape->set_fill_color(Color::white);
+      m_Nodes.push_back(shape);
+      
+      if (instanceOf<Circle>(shape)) {
+        Circle* child = dynamic_cast<Circle*>(shape);
+        Circle* parent = dynamic_cast<Circle*>(&m_Nodes[parent_index]);
+        
+        m_Lines.push_back(new Line(parent->center(), child->center()));
+      }
+      
+      if (flag) parent_index++;
+      flag = !flag;
+    }
+  }
+}
+
+Shape* Binary_tree::newNode(Point xy)
+{
+  return new Circle(xy, 10);
+}
+
+void Binary_tree::draw_lines() const
+{
+  for (int i = 0; i < m_Lines.size(); ++i)
+  {
+    m_Lines[i].draw();
+  }
+  
+  for (int i = 0; i < m_Nodes.size(); ++i)
+  {
+    m_Nodes[i].draw();
+  }
+}
