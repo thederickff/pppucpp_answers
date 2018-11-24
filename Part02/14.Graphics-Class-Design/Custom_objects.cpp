@@ -304,5 +304,45 @@ void Octagon::draw_lines() const
     Closed_polyline::draw_lines();
 }
 
+///////////////////////////// Exercise 09 //////////////////////////////////////
+Group::Group()
+{
+}
 
+Group::Group(initializer_list<Shape*> ss)
+{
+  for (Shape* s : ss)
+  {
+    add(s);
+  }
+}
 
+Group::~Group()
+{
+}
+
+void Group::add(Shape& shape)
+{
+  shapes.push_back(shape);
+}
+
+void Group::add(Shape* shape)
+{
+  shapes.push_back(shape);
+}
+
+void Group::attachTo(Simple_window& win)
+{
+  for (int i = 0; i < shapes.size(); ++i)
+  {
+    win.attach(shapes[i]);
+  }
+}
+
+void Group::move(int dx, int dy)
+{
+  for (int i = 0; i < shapes.size(); ++i)
+  {
+    shapes[i].move(dx, dy);
+  }
+}

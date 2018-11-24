@@ -1,4 +1,4 @@
-  #ifndef __Custom__Objects__
+#ifndef __Custom__Objects__
 #define __Custom__Objects__
 
 #include "Simple_window.h"
@@ -14,6 +14,7 @@ public:
   void draw_lines() const;
 
   int radius() const { return r; }
+
 private:
   int r;
 };
@@ -25,6 +26,7 @@ public:
   void draw_lines() const;
 
   int radius() const { return r; }
+
 private:
   int r;
 };
@@ -36,6 +38,7 @@ public:
   void draw_lines() const;
 
   int radius() const { return r; }
+
 private:
   int r;
 };
@@ -47,6 +50,7 @@ public:
   void draw_lines() const;
 
   int radius() const { return r; }
+
 private:
   int r;
 };
@@ -113,6 +117,7 @@ bool line_segment_intersection(Point p1, Point p2, Point p3, Point p4, Point &in
 struct Striped_closed_polyline : Closed_polyline {
 	Striped_closed_polyline(int d);
 	void draw_lines() const;
+
 private:
 	int density;
 };
@@ -121,12 +126,33 @@ private:
 class Octagon : public Closed_polyline
 {
 public:
-    Octagon(Point p, int rr);
-    void draw_lines() const;
+  Octagon(Point p, int rr);
+  void draw_lines() const;
     
-    inline int radius() const { return r; }
+  inline int radius() const { return r; }
+
 private:
-    int r;
+  int r;
+};
+
+///////////////////////////// Exercise 09 //////////////////////////////////////
+class Group
+{
+public:
+  Group();
+  Group(initializer_list<Shape*> s);
+  ~Group();
+  Group(const Group &group) = delete;
+  Group &operator=(const Group &group) = delete;
+
+  void add(Shape& shape);
+  void add(Shape* shape);
+
+  void attachTo(Simple_window& win);
+
+  void move(int dx, int dy);
+private:
+  Vector_ref<Shape> shapes; 
 };
 
 #endif // defined(__Custom__Objects__)
