@@ -412,7 +412,7 @@ Binary_tree::Binary_tree(Point xy, int level)
 : m_Level(level)
 {
   add(xy);
-  constructNodes();
+  //constructNodes();
 }
 
 void Binary_tree::constructNodes()
@@ -453,18 +453,21 @@ void Binary_tree::constructNodes()
       Shape* shape = newNode(Point{root.x + j * 30 + offsetX, root.y + offsetY});
       shape->set_fill_color(Color::white);
       m_Nodes.push_back(shape);
-      
-      if (instanceOf<Circle>(shape)) {
-        Circle* child = dynamic_cast<Circle*>(shape);
-        Circle* parent = dynamic_cast<Circle*>(&m_Nodes[parent_index]);
-        
-        m_Lines.push_back(new Line(parent->center(), child->center()));
-      }
+
+      m_Lines.push_back(newLine(shape, parent_index));
       
       if (flag) parent_index++;
       flag = !flag;
     }
   }
+}
+
+Shape* Binary_tree::newLine(Shape* shape, int parent_index)
+{
+  Circle* child = dynamic_cast<Circle*>(shape);
+  Circle* parent = dynamic_cast<Circle*>(&m_Nodes[parent_index]);
+    
+  return new Line(parent->center(), child->center());
 }
 
 Shape* Binary_tree::newNode(Point xy)
@@ -483,4 +486,29 @@ void Binary_tree::draw_lines() const
   {
     m_Nodes[i].draw();
   }
+}
+
+///////////////////////////// Exercise 12 //////////////////////////////////////
+Triangle_binary_tree::Triangle_binary_tree(Point xy, int level)
+: Binary_tree(xy, level)
+{
+  constructNodes();
+}
+
+Shape* Triangle_binary_tree::newLine(Shape* shape, int parent_index)
+{
+  Point pp = m_Nodes[parent_index].point(0);
+  Point pc = shape->point(0);
+
+  return new Line({pp.x, pp.y + 10}, {pc.x, pc.y + 10});
+}
+
+Shape* Triangle_binary_tree::newNode(Point xy)
+{
+  Closed_polyline* triangle = new Closed_polyline();
+  triangle->add(xy);
+  triangle->add(Point{xy.x + 10, xy.y + 20});
+  triangle->add(Point{xy.x - 10, xy.y + 20});
+
+  return triangle;
 }

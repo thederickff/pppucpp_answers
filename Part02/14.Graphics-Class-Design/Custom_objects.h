@@ -189,15 +189,25 @@ public:
   Binary_tree(Point xy, int level);
 
   void constructNodes();
-
-  Shape* newNode(Point xy);
+  virtual Shape* newLine(Shape* shape, int parent_index);
+  virtual Shape* newNode(Point xy);
   
   void draw_lines() const;
 
-private:
+protected:
   int m_Level;
   Vector_ref<Shape> m_Nodes;
-  Vector_ref<Line> m_Lines;
+  Vector_ref<Shape> m_Lines;
+};
+
+///////////////////////////// Exercise 12 //////////////////////////////////////
+class Triangle_binary_tree : public Binary_tree
+{
+public:
+  Triangle_binary_tree(Point xy, int level);
+  
+  Shape* newLine(Shape* shape, int parent_index) override;
+  Shape* newNode(Point xy) override;
 };
 
 #endif // defined(__Custom__Objects__)

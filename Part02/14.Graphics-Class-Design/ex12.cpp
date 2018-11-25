@@ -12,8 +12,10 @@ int main()
 
     try
     {
-        
+        Triangle_binary_tree tbt(Point{400, 130}, 7);
+        //tbt.constructNodes();
 
+        win.attach(tbt);
         win.wait_for_button();
     }
     catch (const exception &e)
