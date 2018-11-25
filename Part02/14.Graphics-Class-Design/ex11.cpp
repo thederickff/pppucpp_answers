@@ -16,6 +16,7 @@ int main()
     try
     {
         Binary_tree binary(Point{400, 130}, 7);
+        binary.constructNodes();
 
         win.attach(binary);
         win.wait_for_button();
