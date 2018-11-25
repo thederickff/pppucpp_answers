@@ -13,8 +13,9 @@ int main()
 
     try
     {
-        
+        Arrow arrow(Point{240, 20}, Point{100, 100});
 
+        win.attach(arrow);
         win.wait_for_button();
     }
     catch (const exception &e)

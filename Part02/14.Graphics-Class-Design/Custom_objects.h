@@ -210,4 +210,22 @@ public:
   Shape* newNode(Point xy) override;
 };
 
+///////////////////////////// Exercise 13 //////////////////////////////////////
+class Arrow : public Shape
+{
+public:
+  Arrow(Point a, Point b);
+  
+  void draw_lines() const;
+
+  int angle() const { return m_Angle; }
+  double radius() const { return m_Radius; }
+
+private:
+  int m_Angle;
+  double m_Radius;
+  Point m_A;
+  Point m_B;
+};
+
 #endif // defined(__Custom__Objects__)

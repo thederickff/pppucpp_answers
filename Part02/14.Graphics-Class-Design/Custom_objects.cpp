@@ -512,3 +512,43 @@ Shape* Triangle_binary_tree::newNode(Point xy)
 
   return triangle;
 }
+
+///////////////////////////// Exercise 13 //////////////////////////////////////
+Arrow::Arrow(Point a, Point b)
+: m_A(a), m_B(b)
+{
+  int x = b.x - a.x;
+  int y = b.y - a.y;
+
+  m_Radius = sqrt(x * x + y * y);
+  m_Angle = acos(x / m_Radius) * 180 / pi;
+
+  if (y > 0) {
+    m_Angle = 360 - m_Angle;
+  }
+}
+
+void Arrow::draw_lines() const
+{
+  if (color().visibility())
+  {
+    Point arrow {
+      int(10 * cos(radian(m_Angle))) + m_B.x,
+      abs(int(10 * sin(radian(m_Angle))) - m_B.y)
+    };
+    Point arrowPlus90 {
+      int(5 * cos(radian(angleAdd(m_Angle, 90)))) + m_B.x,
+      abs(int(5 * sin(radian(angleAdd(m_Angle, 90)))) - m_B.y)
+    };
+    Point arrowMinus90 {
+      int(5 * cos(radian(angleSub(m_Angle, 90)))) + m_B.x,
+      abs(int(5 * sin(radian(angleSub(m_Angle, 90)))) - m_B.y)
+    };
+
+    fl_line(m_A.x, m_A.y, m_B.x, m_B.y);
+    fl_line(m_B.x, m_B.y, arrowPlus90.x, arrowPlus90.y);
+    fl_line(m_B.x, m_B.y, arrowMinus90.x, arrowMinus90.y);
+    fl_line(arrowPlus90.x, arrowPlus90.y, arrow.x, arrow.y);
+    fl_line(arrowMinus90.x, arrowMinus90.y, arrow.x, arrow.y);
+  }
+}
