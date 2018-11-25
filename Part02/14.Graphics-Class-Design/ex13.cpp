@@ -13,9 +13,16 @@ int main()
 
     try
     {
-        Arrow arrow(Point{240, 20}, Point{100, 100});
+        //Binary_tree bt(Point{340, 200}, 5); // standard
+        //Binary_tree bt(Point{340, 200}, 5, BTLineType::arrow_up, Color::dark_blue);
+        //Binary_tree bt(Point{340, 200}, 5, BTLineType::arrow_down, Color::cyan);
+        //bt.constructNodes();
+        //Triangle_binary_tree tbt(Point{340, 200}, 6); // standard
+        Triangle_binary_tree tbt(Point{340, 200}, 6, BTLineType::arrow_down, Color::dark_yellow);
+        //Triangle_binary_tree tbt(Point{340, 200}, 6, BTLineType::arrow_up, Color::black);
 
-        win.attach(arrow);
+        //win.attach(bt);
+        win.attach(tbt);
         win.wait_for_button();
     }
     catch (const exception &e)

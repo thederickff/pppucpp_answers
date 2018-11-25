@@ -176,45 +176,54 @@ private:
   Image image;
 };
 
-///////////////////////////// Exercise 11 //////////////////////////////////////
+///////////////////////////// Exercise 11, 12, and 13 //////////////////////////////////////
 template<class Base, class T>
 inline bool instanceOf(const T *t)
 {
   return dynamic_cast<const Base*>(t) != nullptr;
 }
 
+struct Line2P
+{
+  Point a, b;
+};
+
+enum BTLineType
+{
+  standard, arrow_up, arrow_down
+};
+
 class Binary_tree : public Shape
 {
 public:
-  Binary_tree(Point xy, int level);
+  Binary_tree(Point xy, int level, BTLineType lineType=BTLineType::standard, Color lineColor=Color::black);
 
   void constructNodes();
-  virtual Shape* newLine(Shape* shape, int parent_index);
+  virtual Line2P newLine(Shape* shape, int parent_index);
   virtual Shape* newNode(Point xy);
-  
   void draw_lines() const;
 
 protected:
   int m_Level;
   Vector_ref<Shape> m_Nodes;
   Vector_ref<Shape> m_Lines;
+  BTLineType m_LineType;
+  Color m_LineColor;
 };
 
-///////////////////////////// Exercise 12 //////////////////////////////////////
 class Triangle_binary_tree : public Binary_tree
 {
 public:
-  Triangle_binary_tree(Point xy, int level);
+  Triangle_binary_tree(Point xy, int level, BTLineType lineType=BTLineType::standard, Color lineColor=Color::black);
   
-  Shape* newLine(Shape* shape, int parent_index) override;
+  Line2P newLine(Shape* shape, int parent_index) override;
   Shape* newNode(Point xy) override;
 };
 
-///////////////////////////// Exercise 13 //////////////////////////////////////
 class Arrow : public Shape
 {
 public:
-  Arrow(Point a, Point b);
+  Arrow(Point a, Point b, Color color=Color::black);
   
   void draw_lines() const;
 
@@ -226,6 +235,7 @@ private:
   double m_Radius;
   Point m_A;
   Point m_B;
+  Color m_Color;
 };
 
 #endif // defined(__Custom__Objects__)

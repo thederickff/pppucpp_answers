@@ -408,8 +408,8 @@ void Pseudo_window::draw_content() const
 }
 
 ///////////////////////////// Exercise 11 //////////////////////////////////////
-Binary_tree::Binary_tree(Point xy, int level)
-: m_Level(level)
+Binary_tree::Binary_tree(Point xy, int level, BTLineType lineType, Color lineColor)
+: m_Level(level), m_LineType(lineType), m_LineColor(lineColor)
 {
   add(xy);
   //constructNodes();
@@ -439,7 +439,7 @@ void Binary_tree::constructNodes()
       continue;
     }
 
-    offsetY += 40;
+    offsetY += 50;
   
     if (i > 1) {
       offsetLevel += exp-1;
@@ -454,7 +454,19 @@ void Binary_tree::constructNodes()
       shape->set_fill_color(Color::white);
       m_Nodes.push_back(shape);
 
-      m_Lines.push_back(newLine(shape, parent_index));
+      Line2P line = newLine(shape, parent_index);
+
+      switch (m_LineType) {
+        case BTLineType::standard:
+          m_Lines.push_back(new Line(line.a, line.b));
+          break;
+        case BTLineType::arrow_down:
+          m_Lines.push_back(new Arrow(line.a, line.b, m_LineColor));
+          break;
+        case BTLineType::arrow_up:
+          m_Lines.push_back(new Arrow(line.b, line.a, m_LineColor));
+          break;
+      }
       
       if (flag) parent_index++;
       flag = !flag;
@@ -462,12 +474,14 @@ void Binary_tree::constructNodes()
   }
 }
 
-Shape* Binary_tree::newLine(Shape* shape, int parent_index)
+Line2P Binary_tree::newLine(Shape* shape, int parent_index)
 {
   Circle* child = dynamic_cast<Circle*>(shape);
   Circle* parent = dynamic_cast<Circle*>(&m_Nodes[parent_index]);
     
-  return new Line(parent->center(), child->center());
+  Point pp = parent->center();
+  Point pc = child->center();
+  return {Point{pp.x, pp.y + 10}, Point{pc.x, pc.y - 10}};
 }
 
 Shape* Binary_tree::newNode(Point xy)
@@ -489,18 +503,18 @@ void Binary_tree::draw_lines() const
 }
 
 ///////////////////////////// Exercise 12 //////////////////////////////////////
-Triangle_binary_tree::Triangle_binary_tree(Point xy, int level)
-: Binary_tree(xy, level)
+Triangle_binary_tree::Triangle_binary_tree(Point xy, int level, BTLineType lineType, Color lineColor)
+: Binary_tree(xy, level, lineType, lineColor)
 {
   constructNodes();
 }
 
-Shape* Triangle_binary_tree::newLine(Shape* shape, int parent_index)
+Line2P Triangle_binary_tree::newLine(Shape* shape, int parent_index)
 {
   Point pp = m_Nodes[parent_index].point(0);
   Point pc = shape->point(0);
 
-  return new Line({pp.x, pp.y + 10}, {pc.x, pc.y + 10});
+  return {Point{pp.x, pp.y + 20}, Point{pc.x, pc.y}};
 }
 
 Shape* Triangle_binary_tree::newNode(Point xy)
@@ -514,8 +528,8 @@ Shape* Triangle_binary_tree::newNode(Point xy)
 }
 
 ///////////////////////////// Exercise 13 //////////////////////////////////////
-Arrow::Arrow(Point a, Point b)
-: m_A(a), m_B(b)
+Arrow::Arrow(Point a, Point b, Color color)
+: m_A(a), m_B(b), m_Color(color)
 {
   int x = b.x - a.x;
   int y = b.y - a.y;
@@ -526,6 +540,13 @@ Arrow::Arrow(Point a, Point b)
   if (y > 0) {
     m_Angle = 360 - m_Angle;
   }
+
+  Point smaller {
+    int(10 * cos(radian(angleAdd(m_Angle, 180)))) + m_B.x,
+    abs(int(10 * sin(radian(angleAdd(m_Angle, 180)))) - m_B.y)
+  };
+
+  m_B = smaller;
 }
 
 void Arrow::draw_lines() const
@@ -545,6 +566,7 @@ void Arrow::draw_lines() const
       abs(int(5 * sin(radian(angleSub(m_Angle, 90)))) - m_B.y)
     };
 
+    fl_color(m_Color.as_int());
     fl_line(m_A.x, m_A.y, m_B.x, m_B.y);
     fl_line(m_B.x, m_B.y, arrowPlus90.x, arrowPlus90.y);
     fl_line(m_B.x, m_B.y, arrowMinus90.x, arrowMinus90.y);
