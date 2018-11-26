@@ -176,7 +176,7 @@ private:
   Image image;
 };
 
-///////////////////////////// Exercise 11, 12, and 13 //////////////////////////////////////
+///////////////////////////// Exercise 11, 12, 13, and 14 //////////////////////////////////////
 template<class Base, class T>
 inline bool instanceOf(const T *t)
 {
@@ -199,14 +199,20 @@ public:
   Binary_tree(Point xy, int level, BTLineType lineType=BTLineType::standard, Color lineColor=Color::black);
 
   void constructNodes();
+  void addText(const string& text, const string& pos);
   virtual Line2P newLine(Shape* shape, int parent_index);
   virtual Shape* newNode(Point xy);
+  virtual Point getPoint(Shape* shape);
   void draw_lines() const;
+
+private:
+  void checkPosition(const string& pos);
 
 protected:
   int m_Level;
   Vector_ref<Shape> m_Nodes;
   Vector_ref<Shape> m_Lines;
+  Vector_ref<Text> m_Labels;
   BTLineType m_LineType;
   Color m_LineColor;
 };
@@ -218,6 +224,7 @@ public:
   
   Line2P newLine(Shape* shape, int parent_index) override;
   Shape* newNode(Point xy) override;
+  Point getPoint(Shape* shape) override;
 };
 
 class Arrow : public Shape

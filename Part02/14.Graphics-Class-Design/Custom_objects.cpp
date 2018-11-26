@@ -407,7 +407,7 @@ void Pseudo_window::draw_content() const
   image.draw_lines();
 }
 
-///////////////////////////// Exercise 11 //////////////////////////////////////
+///////////////////////////// Exercise 11, 12, 13, and 14 //////////////////////////////////////
 Binary_tree::Binary_tree(Point xy, int level, BTLineType lineType, Color lineColor)
 : m_Level(level), m_LineType(lineType), m_LineColor(lineColor)
 {
@@ -439,18 +439,18 @@ void Binary_tree::constructNodes()
       continue;
     }
 
-    offsetY += 50;
+    offsetY += 70;
   
     if (i > 1) {
       offsetLevel += exp-1;
       exp *= 2;
     }
   
-    offsetX -= 15 * (i+offsetLevel);
+    offsetX -= 30 * (i+offsetLevel);
 
     for (int j = 0; j <= size; ++j)
     {
-      Shape* shape = newNode(Point{root.x + j * 30 + offsetX, root.y + offsetY});
+      Shape* shape = newNode(Point{root.x + j * 60 + offsetX, root.y + offsetY});
       shape->set_fill_color(Color::white);
       m_Nodes.push_back(shape);
 
@@ -468,10 +468,87 @@ void Binary_tree::constructNodes()
           break;
       }
       
-      if (flag) parent_index++;
+      if (flag) {
+        parent_index++;
+      }
+
       flag = !flag;
     }
   }
+}
+
+void Binary_tree::addText(const string& text, const string& pos)
+{
+  checkPosition(pos);
+  
+  int level = 0;
+  int itemPerLvl = 1;
+  int offset = 0;
+
+  Point point{0,0};
+
+  for (int i = 0; i < m_Nodes.size();)
+  {
+    level++;
+
+    for (int j = 0; j < itemPerLvl; ++j) {
+      if (offset == j) {
+        point = getPoint(&m_Nodes[i+j]);
+      }
+    }
+      
+    i += itemPerLvl;
+
+    char dir = pos[level-1];
+
+    if (dir == 'l') {
+        offset = (offset * 2);
+    } else if (dir == 'r') {
+        offset = (offset * 2) + 1;
+    }
+
+    itemPerLvl *= 2;
+
+    int remaning = m_Nodes.size() - i;
+
+    if (remaning < itemPerLvl) {
+        break;
+    }
+
+    if (level > pos.size()) {
+        break;
+    }
+  }
+  
+  m_Labels.push_back(new Text(point, text));
+}
+
+void Binary_tree::checkPosition(const string& pos)
+{
+  if (pos.size() > m_Level-1) {
+    stringstream ss;
+    ss << "Binary_tree::addText(): Max position size reached, given: " << pos.size() << ", max: " << (m_Level-1) << ", from (" << pos << ")";
+    throw runtime_error(ss.str());
+  }
+
+  for (const char& p : pos) {
+    switch (p) {
+      case 'l':
+      case 'r':
+        break;
+      default:
+        stringstream ss;
+        ss << "Binary_tree::addText(): Invalid given position '" <<  p << "' from (" << pos << ")";
+        throw runtime_error(ss.str());
+    }
+  }
+}
+
+Point Binary_tree::getPoint(Shape* shape)
+{
+  Circle* circle = dynamic_cast<Circle*>(shape);
+
+  return {circle->center().x-10, circle->center().y};
 }
 
 Line2P Binary_tree::newLine(Shape* shape, int parent_index)
@@ -481,12 +558,12 @@ Line2P Binary_tree::newLine(Shape* shape, int parent_index)
     
   Point pp = parent->center();
   Point pc = child->center();
-  return {Point{pp.x, pp.y + 10}, Point{pc.x, pc.y - 10}};
+  return {Point{pp.x, pp.y + 20}, Point{pc.x, pc.y - 20}};
 }
 
 Shape* Binary_tree::newNode(Point xy)
 {
-  return new Circle(xy, 10);
+  return new Circle(xy, 20);
 }
 
 void Binary_tree::draw_lines() const
@@ -500,9 +577,13 @@ void Binary_tree::draw_lines() const
   {
     m_Nodes[i].draw();
   }
+
+  for (int i = 0; i < m_Labels.size(); ++i)
+  {
+    m_Labels[i].draw();
+  }
 }
 
-///////////////////////////// Exercise 12 //////////////////////////////////////
 Triangle_binary_tree::Triangle_binary_tree(Point xy, int level, BTLineType lineType, Color lineColor)
 : Binary_tree(xy, level, lineType, lineColor)
 {
@@ -514,20 +595,26 @@ Line2P Triangle_binary_tree::newLine(Shape* shape, int parent_index)
   Point pp = m_Nodes[parent_index].point(0);
   Point pc = shape->point(0);
 
-  return {Point{pp.x, pp.y + 20}, Point{pc.x, pc.y}};
+  return {Point{pp.x, pp.y + 40}, Point{pc.x, pc.y}};
 }
 
 Shape* Triangle_binary_tree::newNode(Point xy)
 {
   Closed_polyline* triangle = new Closed_polyline();
   triangle->add(xy);
-  triangle->add(Point{xy.x + 10, xy.y + 20});
-  triangle->add(Point{xy.x - 10, xy.y + 20});
+  triangle->add(Point{xy.x + 20, xy.y + 40});
+  triangle->add(Point{xy.x - 20, xy.y + 40});
 
   return triangle;
 }
 
-///////////////////////////// Exercise 13 //////////////////////////////////////
+Point Triangle_binary_tree::getPoint(Shape* shape)
+{
+  Point p = shape->point(0);
+
+  return {p.x - 10, p.y + 30};
+}
+
 Arrow::Arrow(Point a, Point b, Color color)
 : m_A(a), m_B(b), m_Color(color)
 {

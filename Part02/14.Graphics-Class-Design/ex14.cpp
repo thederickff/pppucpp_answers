@@ -13,6 +13,30 @@ int main()
 
     try
     {
+        Binary_tree bt(Point{400, 200}, 4);
+        bt.constructNodes();
+        bt.addText("root", "");
+        bt.addText("aaa", "lll");
+        bt.addText("aab", "llr");
+        bt.addText("aac", "lrl");
+        bt.addText("aad", "lrr");
+        bt.addText("aae", "rll");
+        bt.addText("aaf", "rlr");
+        bt.addText("aag", "rrl");
+        bt.addText("aah", "rrr");
+
+        win.attach(bt);
+
+        // Triangle_binary_tree tbt(Point{400, 200}, 4);
+        // tbt.addText("aa", "");
+        // tbt.addText("bb", "l");
+        // tbt.addText("cc", "r");
+        // tbt.addText("dd", "ll");
+        // tbt.addText("ee", "lr");
+        // tbt.addText("ff", "rl");
+        // tbt.addText("gg", "rr");
+
+        //win.attach(tbt);
         win.wait_for_button();
     }
     catch (const exception &e)
