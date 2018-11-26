@@ -12,7 +12,7 @@ int main()
     };
 
     std::vector<int> nav = {
-        1, 1, 1, 1
+        1, 2
     };
 
     int level = 0;
@@ -45,6 +45,10 @@ int main()
         int remaning = nodes.size() - i;
 
         if (remaning < itemPerLvl) {
+            break;
+        }
+
+        if (level > nav.size()) {
             break;
         }
     }
