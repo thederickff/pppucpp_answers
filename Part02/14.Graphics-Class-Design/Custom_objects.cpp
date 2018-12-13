@@ -661,3 +661,82 @@ void Arrow::draw_lines() const
     fl_line(arrowMinus90.x, arrowMinus90.y, arrow.x, arrow.y);
   }
 }
+
+///////////////////////////// Exercise 16 //////////////////////////////////////
+void print_controller(Controller& ctrl)
+{
+    ctrl.on();
+    ctrl.set_level(1);
+    ctrl.show();
+    ctrl.off();
+    ctrl.set_level(2);
+    ctrl.show();
+    ctrl.set_level(3);
+    ctrl.on();
+    ctrl.show();
+    ctrl.set_level(2039);
+    ctrl.off();
+    ctrl.show();
+}
+
+void BasicController::on()
+{
+  status = true;
+}
+
+void BasicController::off()
+{
+  status = false;
+}
+
+void BasicController::set_level(int lvl)
+{
+  level = lvl;
+}
+
+void BasicController::show()
+{
+  cout << "Level: " << level << ", Status: " << (status ? "on":"off") << endl;
+}
+
+RedColorShapeController::RedColorShapeController(Simple_window& sw, Shape& shape)
+: m_sw(&sw), m_shape(&shape)
+{
+  m_sw->attach(*m_shape);
+}
+
+void RedColorShapeController::on()
+{
+  m_shape->set_color(Color::dark_red);
+  // m_shape->set_fill_color(Color::red);
+}
+
+void RedColorShapeController::off()
+{
+  m_shape->set_color(Color::black);
+  // m_shape->set_fill_color(Color::invisible);
+}
+
+void RedColorShapeController::set_level(int lvl)
+{
+  switch (lvl)
+  {
+    case 1:
+      m_shape->set_style(Line_style(Line_style::dash, 5));
+      break;
+    case 2:
+      m_shape->set_style(Line_style(Line_style::dashdot,5));
+      break;
+    case 3:
+      m_shape->set_style(Line_style(Line_style::dot, 5));
+      break;
+    default:
+      m_shape->set_style(Line_style(Line_style::solid, 5));
+      break;
+  }
+}
+
+void RedColorShapeController::show()
+{
+  m_sw->wait_for_button();
+}

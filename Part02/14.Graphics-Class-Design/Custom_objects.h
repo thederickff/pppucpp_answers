@@ -245,4 +245,41 @@ private:
   Color m_Color;
 };
 
+///////////////////////////// Exercise 16 //////////////////////////////////////
+class Controller
+{
+public:
+  virtual void on() = 0;
+  virtual void off() = 0;
+  virtual void set_level(int lvl) = 0;
+  virtual void show() = 0;
+};
+
+void print_controller(Controller& ctrl);
+
+class BasicController : public Controller
+{
+public:
+  void on() override;
+  void off() override;
+  void set_level(int lvl) override;
+  void show() override;
+private:
+  int level;
+  bool status;
+};
+
+class RedColorShapeController : public Controller
+{
+public:
+  RedColorShapeController(Simple_window& sw, Shape& shape);
+  void on() override;
+  void off() override;
+  void set_level(int lvl) override;
+  void show() override;
+private:
+  Simple_window* m_sw;
+  Shape* m_shape;
+};
+
 #endif // defined(__Custom__Objects__)

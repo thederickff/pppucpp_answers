@@ -14,8 +14,13 @@ int main()
 
     try
     {
-        
-        win.wait_for_button();
+        Rectangle rect{Point{200, 200}, Point{400, 400}};
+
+        BasicController bc;
+        print_controller(bc);
+
+        RedColorShapeController sc(win, rect);
+        print_controller(sc);
     }
     catch (const exception &e)
     {
