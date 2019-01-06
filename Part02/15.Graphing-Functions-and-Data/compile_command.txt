@@ -1,0 +1,1 @@
+g++ -w -Wall -std=c++11 *.o exercise.cpp Custom_Objects.cpp `fltk-config --ldflags --use-images`
